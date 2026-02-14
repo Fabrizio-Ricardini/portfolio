@@ -1,0 +1,276 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #e4e4e7;
+
+  /* Terminal Theme (Cyberpunk Violet) */
+  --terminal-bg: #0a0a0a;
+  --terminal-text: #e4e4e7;
+  --terminal-accent: #c084fc; /* Violet 400 — Neon */
+  --terminal-secondary: #a1a1aa; /* Zinc 400 */
+  --terminal-border: #27272a; /* Zinc 800 */
+  --terminal-executable: #4ade80; /* Green 400 — executable files */
+  --terminal-success: #4ade80; /* Green 400 — success logs */
+  --terminal-error: #f87171; /* Red 400 — errors */
+  --terminal-quote: #facc15; /* Yellow 400 — blockquotes */
+
+  /* Modern Theme (Elegant Dark) */
+  --modern-bg: #030712; /* Gray 950 */
+  --modern-text: #f8fafc; /* Slate 50 */
+  --modern-accent: #7c3aed; /* Violet 600 */
+  --modern-muted: #94a3b8; /* Slate 400 */
+  --modern-surface: #111827; /* Gray 900 */
+  --modern-border: #1e293b; /* Slate 800 */
+  --modern-card: #111827; /* Gray 900 */
+  --modern-card-hover: #1f2937; /* Gray 800 */
+  --modern-accent-fg: #ffffff; /* Text on accent backgrounds */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+
+  /* Custom Colors */
+  --color-terminal-bg: var(--terminal-bg);
+  --color-terminal-text: var(--terminal-text);
+  --color-terminal-accent: var(--terminal-accent);
+  --color-terminal-secondary: var(--terminal-secondary);
+  --color-terminal-border: var(--terminal-border);
+  --color-terminal-executable: var(--terminal-executable);
+  --color-terminal-success: var(--terminal-success);
+  --color-terminal-error: var(--terminal-error);
+  --color-terminal-quote: var(--terminal-quote);
+  
+  --color-modern-bg: var(--modern-bg);
+  --color-modern-text: var(--modern-text);
+  --color-modern-accent: var(--modern-accent);
+  --color-modern-muted: var(--modern-muted);
+  --color-modern-surface: var(--modern-surface);
+  --color-modern-border: var(--modern-border);
+  --color-modern-card: var(--modern-card);
+  --color-modern-card-hover: var(--modern-card-hover);
+  --color-modern-accent-fg: var(--modern-accent-fg);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* ── CRT Turn-Off Effect ────────────────────────────────────────────── */
+
+@keyframes crt-turn-off {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  40% {
+    opacity: 1;
+    transform: scaleY(0.005) scaleX(1);
+    filter: brightness(8);
+  }
+  70% {
+    opacity: 0.7;
+    transform: scaleY(0.005) scaleX(0.0);
+    filter: brightness(10);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0.0) scaleX(0.0);
+    filter: brightness(0);
+  }
+}
+
+.animate-crt-off {
+  animation: crt-turn-off 0.55s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* ── CRT Turn-On Effect ─────────────────────────────────────────────── */
+
+@keyframes crt-turn-on {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.005) scaleX(0.0);
+    filter: brightness(10);
+  }
+  40% {
+    opacity: 0.6;
+    transform: scaleY(0.005) scaleX(1);
+    filter: brightness(6);
+  }
+  70% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+.animate-crt-on {
+  animation: crt-turn-on 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Scanlines Overlay ──────────────────────────────────────────────── */
+
+@keyframes scanline-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.terminal-scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+}
+
+.terminal-scanlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 0, 0, 0.15) 1px,
+    rgba(0, 0, 0, 0.15) 2px
+  );
+  opacity: 0.4;
+}
+
+.terminal-scanlines::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  top: -100%;
+  left: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 30%,
+    rgba(192, 132, 252, 0.03) 50%,
+    transparent 70%
+  );
+  animation: scanline-scroll 8s linear infinite;
+}
+
+/* ── Glitch Effect ──────────────────────────────────────────────────── */
+
+@keyframes glitch-skew {
+  0% {
+    transform: skew(0deg);
+  }
+  20% {
+    transform: skew(-1deg);
+  }
+  40% {
+    transform: skew(0.8deg);
+  }
+  60% {
+    transform: skew(-0.4deg);
+  }
+  80% {
+    transform: skew(0.5deg);
+  }
+  100% {
+    transform: skew(0deg);
+  }
+}
+
+@keyframes glitch-color {
+  0%, 100% {
+    text-shadow: none;
+  }
+  25% {
+    text-shadow: -2px 0 #ff0000, 2px 0 #00ffff;
+  }
+  50% {
+    text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
+  }
+  75% {
+    text-shadow: -1px 0 #ff0000, 1px 0 #00ffff;
+  }
+}
+
+.glitch-hover:hover {
+  animation: glitch-skew 0.3s ease-in-out;
+}
+
+.glitch-hover:hover > * {
+  animation: glitch-color 0.3s ease-in-out;
+}
+
+/* ── CRT Screen Glow ────────────────────────────────────────────────── */
+
+.crt-glow {
+  box-shadow:
+    inset 0 0 60px rgba(192, 132, 252, 0.03),
+    inset 0 0 120px rgba(192, 132, 252, 0.01);
+}
+
+/* ── Terminal Cursor Blink ──────────────────────────────────────────── */
+
+@keyframes cursor-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* ── Aurora Dot Grid (Modern Background) ─────────────────────────────── */
+
+.aurora-grid {
+  background-image: radial-gradient(
+    circle,
+    rgba(148, 163, 184, 0.15) 1px,
+    transparent 1px
+  );
+  background-size: 32px 32px;
+}
+
+/* ── Accessibility: Reduced Motion ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .terminal-scanlines,
+  .crt-glow {
+    display: none !important;
+  }
+
+  .animate-crt-off,
+  .animate-crt-on,
+  .glitch-hover:hover,
+  .glitch-hover:hover > * {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
