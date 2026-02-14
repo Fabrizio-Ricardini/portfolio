@@ -7,6 +7,7 @@ import AuroraBackground from "@/components/effects/AuroraBackground";
 const navLinks = [
   { label: "Projects", href: "#projects" },
   { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
   { label: "Contact", href: "#contact" },
 ];

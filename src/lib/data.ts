@@ -1,4 +1,5 @@
 import aboutContent from "@/content/about.md";
+import experienceContent from "@/content/experience.md";
 import skillsContent from "@/content/skills.md";
 import readmeContent from "@/content/README.md";
 import contactContent from "@/content/contact.sh";
@@ -27,6 +28,7 @@ export interface FileSystemItem {
 export const fileContents: Record<string, string> = {
   readme: readmeContent,
   about: aboutContent,
+  experience: experienceContent,
   skills: skillsContent,
   contact: contactContent,
 };
@@ -45,6 +47,42 @@ export const portfolioData = {
       twitter: "https://twitter.com/fabrizio",
     },
   },
+  experience: [
+    {
+      role: "Senior Frontend Engineer",
+      company: "TechFlow",
+      period: "2023 — Present",
+      description:
+        "Leading frontend architecture and performance optimization initiatives.",
+      achievements: [
+        "Migrated legacy monolith to micro-frontends with Next.js",
+        "Improved Core Web Vitals by 40%",
+        "Mentored junior developers",
+      ],
+    },
+    {
+      role: "Full Stack Developer",
+      company: "StartupX",
+      period: "2021 — 2023",
+      description: "Core developer for a high-growth SaaS platform.",
+      achievements: [
+        "Built MVP in 3 months",
+        "Implemented real-time features with WebSockets",
+        "Designed RESTful API with Node.js",
+      ],
+    },
+    {
+      role: "Junior Web Developer",
+      company: "Digital Agency",
+      period: "2019 — 2021",
+      description: "Delivered web solutions for diverse client base.",
+      achievements: [
+        "Developed 15+ client websites",
+        "Implemented pixel-perfect UIs",
+        "Automated CI/CD pipelines",
+      ],
+    },
+  ],
   projects: [
     {
       id: "proj-1",
@@ -96,6 +134,7 @@ export const portfolioData = {
     },
     { name: "README.md", type: "file", content: "readme" },
     { name: "about.md", type: "file", content: "about" },
+    { name: "experience.md", type: "file", content: "experience" },
     { name: "skills.md", type: "file", content: "skills" },
     { name: "contact.sh", type: "executable", content: "contact" },
   ] as FileSystemItem[],

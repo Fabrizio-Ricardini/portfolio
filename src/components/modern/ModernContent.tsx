@@ -320,6 +320,57 @@ export default function ModernContent() {
           </motion.div>
         </section>
 
+        {/* ── Experience Section ────────────────────────────────────── */}
+        <section id="experience" className="scroll-mt-24">
+          <SectionHeading title="Experience" subtitle="My professional journey." />
+          <motion.div
+            variants={stagger}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-80px" }}
+            className="space-y-8 max-w-3xl"
+          >
+            {portfolioData.experience.map((job, index) => (
+              <motion.div
+                key={index}
+                variants={fadeUp}
+                transition={{ duration: 0.4 }}
+                className="relative pl-8 border-l border-white/10"
+              >
+                {/* Timeline dot */}
+                <span className="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-modern-accent ring-4 ring-modern-bg" />
+
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+                  <h3 className="text-xl font-bold text-modern-text">{job.role}</h3>
+                  <span className="text-sm font-mono text-modern-accent bg-modern-accent/10 px-2 py-1 rounded w-fit mt-1 sm:mt-0">
+                    {job.period}
+                  </span>
+                </div>
+
+                <div className="text-lg text-modern-muted font-medium mb-3">
+                  {job.company}
+                </div>
+
+                <p className="text-modern-muted mb-4">{job.description}</p>
+
+                <ul className="space-y-2">
+                  {job.achievements.map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-2 text-sm text-modern-muted/80"
+                    >
+                      <span className="text-modern-accent mt-1.5 text-[10px]">
+                        ➢
+                      </span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </motion.div>
+        </section>
+
         {/* ── Skills Section ───────────────────────────────────────── */}
         <section id="skills" className="scroll-mt-24">
           <SectionHeading
