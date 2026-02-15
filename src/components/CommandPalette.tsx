@@ -79,6 +79,16 @@ export default function CommandPalette() {
       },
     },
     {
+      id: "nav-experience",
+      label: "Experience",
+      icon: FileText,
+      group: "Navigation",
+      action: () => {
+        if (mode === "terminal") setActiveView({ type: "file", path: "experience.md", contentKey: "experience" });
+        else document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
+      },
+    },
+    {
       id: "nav-skills",
       label: "Skills",
       icon: FileText,
@@ -88,26 +98,16 @@ export default function CommandPalette() {
         else document.getElementById("skills")?.scrollIntoView({ behavior: "smooth" });
       },
     },
-      {
-        id: "nav-contact",
-        label: "Contact",
-        icon: Mail,
-        group: "Navigation",
-        action: () => {
-          if (mode === "terminal") setActiveView({ type: "executable", path: "contact.sh", contentKey: "contact" });
-          else document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-        },
+    {
+      id: "nav-contact",
+      label: "Contact",
+      icon: Mail,
+      group: "Navigation",
+      action: () => {
+        if (mode === "terminal") setActiveView({ type: "executable", path: "contact.sh", contentKey: "contact" });
+        else document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
       },
-      {
-        id: "nav-experience",
-        label: "Experience",
-        icon: FileText,
-        group: "Navigation",
-        action: () => {
-          if (mode === "terminal") setActiveView({ type: "file", path: "experience.md", contentKey: "experience" });
-          else document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
-        },
-      },
+    },
     ];
 
   // Filter commands
