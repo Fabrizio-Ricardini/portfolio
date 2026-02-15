@@ -5,11 +5,11 @@ import { Menu, X } from "lucide-react";
 import AuroraBackground from "@/components/effects/AuroraBackground";
 
 const navLinks = [
-  { label: "Projects", href: "#projects" },
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
+  { label: "Proyectos", href: "#projects" },
+  { label: "Sobre mí", href: "#about" },
+  { label: "Experiencia", href: "#experience" },
+  { label: "Habilidades", href: "#skills" },
+  { label: "Contacto", href: "#contact" },
 ];
 
 function scrollToSection(href: string) {
