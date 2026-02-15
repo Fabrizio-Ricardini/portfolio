@@ -16,28 +16,36 @@ export default function ModeSwitcher() {
   const [phase, setPhase] = useState<TransitionPhase>("idle");
   const [displayMode, setDisplayMode] = useState(mode);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const guardTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevModeRef = useRef(mode);
+  const transitionsDisabled = prefersReducedMotion || isMobileViewport;
 
   // Clear any pending timer on unmount
   useEffect(() => {
     if (typeof window === "undefined") return;
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileMedia = window.matchMedia("(max-width: 767px)");
     const onChange = (event: MediaQueryListEvent) =>
       setPrefersReducedMotion(event.matches);
+    const onMobileChange = (event: MediaQueryListEvent) =>
+      setIsMobileViewport(event.matches);
 
     const initTimer = window.setTimeout(() => {
       setPrefersReducedMotion(media.matches);
+      setIsMobileViewport(mobileMedia.matches);
     }, 0);
 
     media.addEventListener("change", onChange);
+    mobileMedia.addEventListener("change", onMobileChange);
 
     return () => {
       window.clearTimeout(initTimer);
       if (timerRef.current) clearTimeout(timerRef.current);
       if (guardTimerRef.current) clearTimeout(guardTimerRef.current);
       media.removeEventListener("change", onChange);
+      mobileMedia.removeEventListener("change", onMobileChange);
     };
   }, []);
 
@@ -68,7 +76,7 @@ export default function ModeSwitcher() {
       timerRef.current = null;
     }
 
-    if (prefersReducedMotion) {
+    if (transitionsDisabled) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setDisplayMode(mode);
       setPhase("idle");
@@ -96,7 +104,7 @@ export default function ModeSwitcher() {
       setDisplayMode(mode);
       setPhase("idle");
     }
-  }, [mode, prefersReducedMotion]);
+  }, [mode, transitionsDisabled]);
 
   const crtClass =
     phase === "crt-off"
@@ -104,6 +112,29 @@ export default function ModeSwitcher() {
       : phase === "crt-on"
       ? "animate-crt-on"
       : "";
+
+  if (transitionsDisabled) {
+    return (
+      <div
+        className={`relative w-full min-h-screen min-h-dvh ${
+          mode === "terminal" ? "overflow-hidden" : "overflow-y-auto"
+        }`}
+      >
+        {mode === "terminal" ? (
+          <div className="w-full h-full">
+            <TerminalLayout />
+          </div>
+        ) : (
+          <div className="w-full h-full">
+            <ModernLayout>
+              <ModernContent />
+            </ModernLayout>
+          </div>
+        )}
+        <ToggleModeButton disabled={false} />
+      </div>
+    );
+  }
 
   return (
     <div
