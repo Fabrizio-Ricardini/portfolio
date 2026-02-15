@@ -76,6 +76,7 @@ export default function Neofetch() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (typeof window.matchMedia !== "function") return;
 
     const motionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mobileMedia = window.matchMedia("(max-width: 767px)");
@@ -86,13 +87,23 @@ export default function Neofetch() {
 
     const initTimer = window.setTimeout(syncMode, 0);
 
-    motionMedia.addEventListener("change", syncMode);
-    mobileMedia.addEventListener("change", syncMode);
+    if (typeof motionMedia.addEventListener === "function") {
+      motionMedia.addEventListener("change", syncMode);
+      mobileMedia.addEventListener("change", syncMode);
+    } else {
+      motionMedia.addListener(syncMode);
+      mobileMedia.addListener(syncMode);
+    }
 
     return () => {
       window.clearTimeout(initTimer);
-      motionMedia.removeEventListener("change", syncMode);
-      mobileMedia.removeEventListener("change", syncMode);
+      if (typeof motionMedia.removeEventListener === "function") {
+        motionMedia.removeEventListener("change", syncMode);
+        mobileMedia.removeEventListener("change", syncMode);
+      } else {
+        motionMedia.removeListener(syncMode);
+        mobileMedia.removeListener(syncMode);
+      }
     };
   }, []);
 

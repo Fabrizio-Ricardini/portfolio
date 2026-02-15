@@ -8,6 +8,7 @@ import ModernLayout from "./modern/ModernLayout";
 import ModernContent from "./modern/ModernContent";
 import ToggleModeButton from "./ToggleModeButton";
 import { CRT_ANIMATION_DURATION_MS, CRT_TURN_ON_DURATION_MS } from "@/lib/constants";
+import TerminalRenderBoundary from "./errors/TerminalRenderBoundary";
 
 type TransitionPhase = "idle" | "crt-off" | "crt-on";
 
@@ -25,6 +26,10 @@ export default function ModeSwitcher() {
   // Clear any pending timer on unmount
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (typeof window.matchMedia !== "function") {
+      return;
+    }
+
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mobileMedia = window.matchMedia("(max-width: 767px)");
     const onChange = (event: MediaQueryListEvent) =>
@@ -37,15 +42,25 @@ export default function ModeSwitcher() {
       setIsMobileViewport(mobileMedia.matches);
     }, 0);
 
-    media.addEventListener("change", onChange);
-    mobileMedia.addEventListener("change", onMobileChange);
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", onChange);
+      mobileMedia.addEventListener("change", onMobileChange);
+    } else {
+      media.addListener(onChange);
+      mobileMedia.addListener(onMobileChange);
+    }
 
     return () => {
       window.clearTimeout(initTimer);
       if (timerRef.current) clearTimeout(timerRef.current);
       if (guardTimerRef.current) clearTimeout(guardTimerRef.current);
-      media.removeEventListener("change", onChange);
-      mobileMedia.removeEventListener("change", onMobileChange);
+      if (typeof media.removeEventListener === "function") {
+        media.removeEventListener("change", onChange);
+        mobileMedia.removeEventListener("change", onMobileChange);
+      } else {
+        media.removeListener(onChange);
+        mobileMedia.removeListener(onMobileChange);
+      }
     };
   }, []);
 
@@ -122,7 +137,9 @@ export default function ModeSwitcher() {
       >
         {mode === "terminal" ? (
           <div className="w-full h-full">
-            <TerminalLayout />
+            <TerminalRenderBoundary>
+              <TerminalLayout />
+            </TerminalRenderBoundary>
           </div>
         ) : (
           <div className="w-full h-full">
@@ -151,7 +168,9 @@ export default function ModeSwitcher() {
             exit={{ opacity: 1 }}
             className={`w-full h-full ${crtClass}`}
           >
-            <TerminalLayout />
+            <TerminalRenderBoundary>
+              <TerminalLayout />
+            </TerminalRenderBoundary>
           </motion.div>
         ) : (
           <motion.div

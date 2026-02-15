@@ -16,6 +16,7 @@ export default function TerminalLayout() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (typeof window.matchMedia !== "function") return;
 
     const motionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
     const desktopMedia = window.matchMedia("(min-width: 768px)");
@@ -24,13 +25,23 @@ export default function TerminalLayout() {
 
     const initTimer = window.setTimeout(syncEffects, 0);
 
-    motionMedia.addEventListener("change", syncEffects);
-    desktopMedia.addEventListener("change", syncEffects);
+    if (typeof motionMedia.addEventListener === "function") {
+      motionMedia.addEventListener("change", syncEffects);
+      desktopMedia.addEventListener("change", syncEffects);
+    } else {
+      motionMedia.addListener(syncEffects);
+      desktopMedia.addListener(syncEffects);
+    }
 
     return () => {
       window.clearTimeout(initTimer);
-      motionMedia.removeEventListener("change", syncEffects);
-      desktopMedia.removeEventListener("change", syncEffects);
+      if (typeof motionMedia.removeEventListener === "function") {
+        motionMedia.removeEventListener("change", syncEffects);
+        desktopMedia.removeEventListener("change", syncEffects);
+      } else {
+        motionMedia.removeListener(syncEffects);
+        desktopMedia.removeListener(syncEffects);
+      }
     };
   }, []);
 
