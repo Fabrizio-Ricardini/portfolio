@@ -107,7 +107,7 @@ export default function ModeSwitcher() {
 
   return (
     <div
-      className={`relative w-full min-h-dvh ${
+      className={`relative w-full min-h-screen min-h-dvh ${
         displayMode === "terminal" ? "overflow-hidden" : "overflow-y-auto"
       }`}
     >

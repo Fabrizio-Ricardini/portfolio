@@ -35,7 +35,7 @@ export default function TerminalLayout() {
   }, []);
 
   return (
-    <div className="relative flex min-h-dvh w-full bg-terminal-bg text-terminal-text font-mono overflow-hidden crt-glow">
+    <div className="relative flex min-h-screen min-h-dvh w-full bg-terminal-bg text-terminal-text font-mono overflow-hidden crt-glow">
       {/* Scanlines overlay */}
       {showVisualEffects && <Scanlines />}
 

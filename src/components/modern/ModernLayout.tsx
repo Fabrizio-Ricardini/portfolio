@@ -28,7 +28,7 @@ export default function ModernLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="flex flex-col min-h-dvh bg-modern-bg text-modern-text font-sans selection:bg-modern-accent/20 selection:text-modern-accent overflow-y-auto overflow-x-hidden">
+    <div className="flex flex-col min-h-screen min-h-dvh bg-modern-bg text-modern-text font-sans selection:bg-modern-accent/20 selection:text-modern-accent overflow-y-auto overflow-x-hidden">
       {/* Aurora ambient background */}
       <AuroraBackground />
 
