@@ -28,12 +28,12 @@ export default function ModernLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-modern-bg text-modern-text font-sans selection:bg-modern-accent/20 selection:text-modern-accent overflow-y-auto h-screen">
+    <div className="flex flex-col min-h-dvh bg-modern-bg text-modern-text font-sans selection:bg-modern-accent/20 selection:text-modern-accent overflow-y-auto overflow-x-hidden">
       {/* Aurora ambient background */}
       <AuroraBackground />
 
       {/* Navbar — glassmorphism */}
-      <nav className="fixed top-0 w-full h-16 z-50 flex items-center justify-between px-6 bg-modern-bg/80 backdrop-blur-md border-b border-white/5">
+      <nav className="fixed top-0 w-full h-16 z-50 flex items-center justify-between px-6 bg-modern-bg/92 md:bg-modern-bg/80 backdrop-blur-none md:backdrop-blur-md border-b border-white/5">
         <div className="flex flex-col">
           <button
             onClick={() => handleNavClick("#hero")}
@@ -69,7 +69,7 @@ export default function ModernLayout({ children }: { children: ReactNode }) {
 
       {/* Mobile nav dropdown */}
       {menuOpen && (
-        <div className="fixed top-16 left-0 right-0 z-40 md:hidden bg-modern-bg/95 backdrop-blur-md border-b border-white/5 shadow-lg">
+        <div className="fixed top-16 left-0 right-0 z-40 md:hidden bg-modern-bg/98 backdrop-blur-none border-b border-white/5 shadow-lg">
           <div className="flex flex-col p-4 space-y-1">
             {navLinks.map((link) => (
               <button

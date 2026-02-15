@@ -15,15 +15,46 @@ export default function ModeSwitcher() {
   const { mode } = useViewMode();
   const [phase, setPhase] = useState<TransitionPhase>("idle");
   const [displayMode, setDisplayMode] = useState(mode);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const guardTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevModeRef = useRef(mode);
 
   // Clear any pending timer on unmount
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = (event: MediaQueryListEvent) =>
+      setPrefersReducedMotion(event.matches);
+
+    const initTimer = window.setTimeout(() => {
+      setPrefersReducedMotion(media.matches);
+    }, 0);
+
+    media.addEventListener("change", onChange);
+
     return () => {
+      window.clearTimeout(initTimer);
       if (timerRef.current) clearTimeout(timerRef.current);
+      if (guardTimerRef.current) clearTimeout(guardTimerRef.current);
+      media.removeEventListener("change", onChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (guardTimerRef.current) {
+      clearTimeout(guardTimerRef.current);
+      guardTimerRef.current = null;
+    }
+
+    if (phase !== "idle") {
+      guardTimerRef.current = setTimeout(() => {
+        setDisplayMode(mode);
+        setPhase("idle");
+        guardTimerRef.current = null;
+      }, Math.max(CRT_ANIMATION_DURATION_MS, CRT_TURN_ON_DURATION_MS) + 250);
+    }
+  }, [phase, mode]);
 
   // Only react when the *context* mode changes (not displayMode)
   useEffect(() => {
@@ -37,9 +68,15 @@ export default function ModeSwitcher() {
       timerRef.current = null;
     }
 
+    if (prefersReducedMotion) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDisplayMode(mode);
+      setPhase("idle");
+      return;
+    }
+
     if (prevMode === "terminal" && mode === "gui") {
       // Terminal → Modern: play CRT turn-off, then switch display
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPhase("crt-off");
       timerRef.current = setTimeout(() => {
         timerRef.current = null;
@@ -59,7 +96,7 @@ export default function ModeSwitcher() {
       setDisplayMode(mode);
       setPhase("idle");
     }
-  }, [mode]);
+  }, [mode, prefersReducedMotion]);
 
   const crtClass =
     phase === "crt-off"
@@ -70,7 +107,7 @@ export default function ModeSwitcher() {
 
   return (
     <div
-      className={`relative w-full h-full ${
+      className={`relative w-full min-h-dvh ${
         displayMode === "terminal" ? "overflow-hidden" : "overflow-y-auto"
       }`}
     >

@@ -60,7 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased h-screen w-screen`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased min-h-dvh w-full overflow-x-hidden`}
       >
         <Providers>
           {children}

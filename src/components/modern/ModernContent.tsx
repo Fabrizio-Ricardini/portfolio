@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { portfolioData, Project } from "@/lib/data";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Github,
   ExternalLink,
@@ -193,17 +193,49 @@ function SectionHeading({
 
 export default function ModernContent() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const media = window.matchMedia("(max-width: 767px)");
+    const syncMobile = (event: MediaQueryListEvent) => setIsMobile(event.matches);
+    const initTimer = window.setTimeout(() => setIsMobile(media.matches), 0);
+
+    media.addEventListener("change", syncMobile);
+
+    return () => {
+      window.clearTimeout(initTimer);
+      media.removeEventListener("change", syncMobile);
+    };
+  }, []);
+
+  const reduceMotion = Boolean(prefersReducedMotion || isMobile);
+  const staggerVariant = reduceMotion
+    ? { animate: { transition: { staggerChildren: 0.02 } } }
+    : stagger;
+  const heroMainTransition = reduceMotion
+    ? { duration: 0.25 }
+    : { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const };
+  const heroSecondaryTransition = reduceMotion
+    ? { delay: 0, duration: 0.2 }
+    : { delay: 0.15, duration: 0.5 };
+  const heroCtaTransition = reduceMotion
+    ? { delay: 0.05, duration: 0.2 }
+    : { delay: 0.3, duration: 0.5 };
+  const itemTransition = reduceMotion ? { duration: 0.2 } : { duration: 0.4 };
 
   return (
     <>
       <div className="space-y-28 pb-16">
         {/* ── Hero Section ─────────────────────────────────────────── */}
         <section id="hero" className="text-center space-y-6 py-20 scroll-mt-24">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={heroMainTransition}
+            >
             <p className="text-modern-accent font-medium text-sm tracking-wide uppercase mb-4">
               {portfolioData.personal.role}
             </p>
@@ -214,7 +246,7 @@ export default function ModernContent() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.5 }}
+            transition={heroSecondaryTransition}
             className="text-xl text-modern-muted max-w-2xl mx-auto leading-relaxed"
           >
             {portfolioData.personal.bio}
@@ -222,7 +254,7 @@ export default function ModernContent() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
+            transition={heroCtaTransition}
             className="flex justify-center gap-4 pt-4"
           >
             <a
@@ -248,7 +280,7 @@ export default function ModernContent() {
             subtitle="Trabajos seleccionados y proyectos paralelos."
           />
           <motion.div
-            variants={stagger}
+            variants={staggerVariant}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-80px" }}
@@ -258,9 +290,9 @@ export default function ModernContent() {
               <motion.div
                 key={project.id}
                 variants={fadeUp}
-                transition={{ duration: 0.4 }}
+                transition={itemTransition}
                 onClick={() => setSelectedProject(project)}
-                className="group cursor-pointer rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/10 hover:border-modern-accent/30 shadow-sm hover:shadow-lg hover:shadow-modern-accent/5 transition-all duration-300 h-full flex flex-col"
+                className="group cursor-pointer rounded-2xl bg-white/5 backdrop-blur-none md:backdrop-blur-md p-6 border border-white/10 hover:border-modern-accent/30 shadow-sm md:hover:shadow-lg md:hover:shadow-modern-accent/5 transition-colors duration-300 h-full flex flex-col"
               >
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="font-bold text-lg text-modern-text group-hover:text-modern-accent transition-colors">
@@ -314,7 +346,7 @@ export default function ModernContent() {
             subtitle="Un poco sobre quién soy y qué me impulsa."
           />
           <motion.div
-            variants={stagger}
+            variants={staggerVariant}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-80px" }}
@@ -323,7 +355,7 @@ export default function ModernContent() {
             {/* Main bio */}
             <motion.div
               variants={fadeUp}
-              transition={{ duration: 0.4 }}
+              transition={itemTransition}
               className="space-y-4"
             >
               <p className="text-modern-text leading-relaxed">
@@ -337,7 +369,7 @@ export default function ModernContent() {
             {/* Philosophy & Currently */}
             <motion.div
               variants={fadeUp}
-              transition={{ duration: 0.4 }}
+              transition={itemTransition}
               className="space-y-6"
             >
               <div className="rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6">
@@ -386,7 +418,7 @@ export default function ModernContent() {
         <section id="experience" className="scroll-mt-24">
           <SectionHeading title="Experiencia" subtitle="Mi trayectoria profesional." />
           <motion.div
-            variants={stagger}
+            variants={staggerVariant}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-80px" }}
@@ -405,7 +437,7 @@ export default function ModernContent() {
             subtitle="Tecnologías y herramientas con las que trabajo."
           />
           <motion.div
-            variants={stagger}
+            variants={staggerVariant}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-80px" }}
@@ -415,8 +447,8 @@ export default function ModernContent() {
               <motion.div
                 key={category.title}
                 variants={fadeUp}
-                transition={{ duration: 0.4 }}
-                className="rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6 hover:border-modern-accent/20 transition-colors"
+                transition={itemTransition}
+                className="rounded-2xl bg-white/5 backdrop-blur-none md:backdrop-blur-md border border-white/10 p-6 hover:border-modern-accent/20 transition-colors"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 rounded-lg bg-white/5 text-modern-accent">
@@ -449,7 +481,7 @@ export default function ModernContent() {
             subtitle="Construyamos algo juntos."
           />
           <motion.div
-            variants={stagger}
+            variants={staggerVariant}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-80px" }}
@@ -458,7 +490,7 @@ export default function ModernContent() {
             {/* Status bar */}
             <motion.div
               variants={fadeUp}
-              transition={{ duration: 0.4 }}
+              transition={itemTransition}
               className="flex items-center gap-6 mb-8 text-sm text-modern-muted"
             >
               <span className="flex items-center gap-2">
@@ -481,11 +513,11 @@ export default function ModernContent() {
                 <motion.a
                   key={link.label}
                   variants={fadeUp}
-                  transition={{ duration: 0.4 }}
+                  transition={itemTransition}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-modern-accent/30 hover:shadow-lg hover:shadow-modern-accent/5 transition-all duration-300"
+                  className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 backdrop-blur-none md:backdrop-blur-md border border-white/10 hover:border-modern-accent/30 md:hover:shadow-lg md:hover:shadow-modern-accent/5 transition-colors duration-300"
                 >
                   <div className="p-2.5 rounded-xl bg-white/5 text-modern-muted group-hover:text-modern-accent group-hover:bg-modern-accent/10 transition-colors">
                     <link.icon size={20} />
@@ -505,7 +537,7 @@ export default function ModernContent() {
             {/* Response time note */}
             <motion.p
               variants={fadeUp}
-              transition={{ duration: 0.4 }}
+              transition={itemTransition}
               className="mt-6 text-xs text-modern-muted"
             >
               Tiempo medio de respuesta: ~24h

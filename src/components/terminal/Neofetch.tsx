@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { portfolioData } from "@/lib/data";
+import { supportsWebGL } from "@/lib/webgl";
+import TerminalEffectsBoundary from "@/components/errors/TerminalEffectsBoundary";
 
 // ── Lazy-load the 3D ASCII scene (WebGL requires browser) ──────────
 const EffectScene = dynamic(
@@ -70,6 +72,29 @@ function ColorPalette() {
 export default function Neofetch() {
   const uptime = useUptime();
   const { personal, projects, fileSystem } = portfolioData;
+  const [show3DEffect, setShow3DEffect] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const motionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileMedia = window.matchMedia("(max-width: 767px)");
+    const syncMode = () =>
+      setShow3DEffect(
+        supportsWebGL() && !motionMedia.matches && !mobileMedia.matches
+      );
+
+    const initTimer = window.setTimeout(syncMode, 0);
+
+    motionMedia.addEventListener("change", syncMode);
+    mobileMedia.addEventListener("change", syncMode);
+
+    return () => {
+      window.clearTimeout(initTimer);
+      motionMedia.removeEventListener("change", syncMode);
+      mobileMedia.removeEventListener("change", syncMode);
+    };
+  }, []);
 
   const fileCount = fileSystem.reduce((count, item) => {
     if (item.type === "folder" && item.children) {
@@ -97,7 +122,21 @@ export default function Neofetch() {
     >
       {/* 3D ASCII Art — stretches to match specs panel height */}
       <div className="shrink-0 w-48 h-48 md:w-64 md:h-auto rounded overflow-hidden border border-terminal-border/30">
-        <EffectScene />
+        {show3DEffect ? (
+          <TerminalEffectsBoundary
+            fallback={
+              <div className="flex h-full w-full items-center justify-center bg-terminal-bg text-terminal-accent text-xs">
+                ASCII EFFECT OFF
+              </div>
+            }
+          >
+            <EffectScene />
+          </TerminalEffectsBoundary>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-terminal-bg text-terminal-accent text-xs">
+            ASCII EFFECT OFF
+          </div>
+        )}
       </div>
 
       {/* System Specs */}

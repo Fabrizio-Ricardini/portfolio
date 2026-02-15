@@ -74,17 +74,17 @@ export default function NoiseBackground() {
         aria-hidden="true"
       />
 
-      {/* Noise overlay — tiled across the screen */}
+      {/* Noise overlay — tiled across container */}
       <div
         ref={overlayRef}
-        className="pointer-events-none fixed inset-0 z-[1] bg-repeat"
+        className="pointer-events-none absolute inset-0 z-0 bg-repeat"
         style={{ backgroundSize: "128px 128px" }}
         aria-hidden="true"
       />
 
       {/* Vignette — heavy darkening at edges */}
       <div
-        className="pointer-events-none fixed inset-0 z-[2]"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
             "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)",

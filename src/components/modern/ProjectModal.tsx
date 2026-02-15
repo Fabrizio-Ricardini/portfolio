@@ -21,7 +21,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/70 md:bg-black/60 backdrop-blur-none md:backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -35,7 +35,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
             >
               <div
-                className="relative w-full max-w-lg pointer-events-auto rounded-2xl bg-modern-bg/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-modern-accent/5 overflow-hidden"
+                className="relative w-full max-w-lg pointer-events-auto rounded-2xl bg-modern-bg/96 md:bg-modern-bg/90 backdrop-blur-none md:backdrop-blur-xl border border-white/10 shadow-2xl shadow-modern-accent/5 overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Accent gradient bar */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileTree from "./FileTree";
 import TerminalContent from "./TerminalContent";
 import InteractiveTerminal from "./InteractiveTerminal";
@@ -12,14 +12,32 @@ import { Menu, X } from "lucide-react";
 export default function TerminalLayout() {
   const { breadcrumb } = useActiveFile();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showVisualEffects, setShowVisualEffects] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const motionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktopMedia = window.matchMedia("(min-width: 768px)");
+    const syncEffects = () =>
+      setShowVisualEffects(!motionMedia.matches && desktopMedia.matches);
+
+    const initTimer = window.setTimeout(syncEffects, 0);
+
+    motionMedia.addEventListener("change", syncEffects);
+    desktopMedia.addEventListener("change", syncEffects);
+
+    return () => {
+      window.clearTimeout(initTimer);
+      motionMedia.removeEventListener("change", syncEffects);
+      desktopMedia.removeEventListener("change", syncEffects);
+    };
+  }, []);
 
   return (
-    <div className="flex h-screen w-screen bg-terminal-bg text-terminal-text font-mono overflow-hidden crt-glow">
+    <div className="relative flex min-h-dvh w-full bg-terminal-bg text-terminal-text font-mono overflow-hidden crt-glow">
       {/* Scanlines overlay */}
-      <Scanlines />
-
-      {/* Animated noise / grain texture */}
-      <NoiseBackground />
+      {showVisualEffects && <Scanlines />}
 
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
@@ -58,7 +76,7 @@ export default function TerminalLayout() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 bg-terminal-bg">
+      <main className="relative z-10 flex-1 flex flex-col min-w-0 bg-terminal-bg">
         {/* Top Bar */}
         <header className="h-9 border-b border-terminal-border flex items-center px-4 text-xs text-terminal-secondary bg-terminal-bg/80 backdrop-blur select-none glitch-hover">
           {/* Hamburger — mobile only */}
@@ -78,9 +96,12 @@ export default function TerminalLayout() {
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-auto p-4 md:p-6 scroll-smooth">
-          <TerminalContent />
-          <InteractiveTerminal />
+        <div className="relative flex-1 overflow-auto p-4 md:p-6 scroll-smooth">
+          {showVisualEffects && <NoiseBackground />}
+          <div className="relative z-10">
+            <TerminalContent />
+            <InteractiveTerminal />
+          </div>
         </div>
       </main>
     </div>

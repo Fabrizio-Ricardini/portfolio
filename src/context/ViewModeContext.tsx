@@ -24,10 +24,17 @@ export const ViewModeProvider: React.FC<{ children: ReactNode }> = ({
   // Hydrate from localStorage on client mount
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const savedMode = localStorage.getItem(PORTFOLIO_VIEW_MODE_KEY) as ViewMode;
-      if (savedMode === "terminal" || savedMode === "gui") {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setModeState(savedMode);
+      try {
+        const savedMode = localStorage.getItem(
+          PORTFOLIO_VIEW_MODE_KEY
+        ) as ViewMode | null;
+
+        if (savedMode === "terminal" || savedMode === "gui") {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setModeState(savedMode);
+        }
+      } catch {
+        // localStorage might be blocked in strict privacy environments
       }
     }
   }, []);
@@ -35,7 +42,11 @@ export const ViewModeProvider: React.FC<{ children: ReactNode }> = ({
   const setMode = (newMode: ViewMode) => {
     setModeState(newMode);
     if (typeof window !== "undefined") {
-      localStorage.setItem(PORTFOLIO_VIEW_MODE_KEY, newMode);
+      try {
+        localStorage.setItem(PORTFOLIO_VIEW_MODE_KEY, newMode);
+      } catch {
+        // Ignore storage write failures and keep in-memory state
+      }
     }
   };
 
