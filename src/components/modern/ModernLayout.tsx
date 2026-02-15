@@ -34,12 +34,15 @@ export default function ModernLayout({ children }: { children: ReactNode }) {
 
       {/* Navbar — glassmorphism */}
       <nav className="fixed top-0 w-full h-16 z-50 flex items-center justify-between px-6 bg-modern-bg/80 backdrop-blur-md border-b border-white/5">
-        <button
-          onClick={() => handleNavClick("#hero")}
-          className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-modern-text to-modern-accent hover:opacity-80 transition-opacity"
-        >
-          Fabrizio
-        </button>
+        <div className="flex flex-col">
+          <button
+            onClick={() => handleNavClick("#hero")}
+            className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-modern-text to-modern-accent hover:opacity-80 transition-opacity"
+          >
+            Fabrizio
+          </button>
+          <span className="hidden md:block text-modern-muted text-xs mt-1">Atajo: <span className="font-mono">Ctrl+K</span> para comandos rápidos</span>
+        </div>
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center space-x-1">

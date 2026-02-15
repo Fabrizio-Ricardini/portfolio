@@ -74,6 +74,7 @@ export default function TerminalLayout() {
           <span className="text-terminal-accent truncate">{breadcrumb}</span>
           <span className="ml-1 text-terminal-text">$</span>
           <span className="ml-1 w-1.5 h-3.5 bg-terminal-accent animate-cursor-blink shrink-0" />
+          <span className="ml-auto text-terminal-secondary text-xs hidden md:inline">Ctrl+K: comandos rápidos</span>
         </header>
 
         {/* Content Area */}
