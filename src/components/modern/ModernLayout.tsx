@@ -41,7 +41,7 @@ export default function ModernLayout({ children }: { children: ReactNode }) {
           >
             Fabrizio
           </button>
-          <span className="hidden md:block text-modern-muted text-xs mt-1">Atajo: <span className="font-mono">Ctrl+K</span> para comandos rápidos</span>
+
         </div>
 
         {/* Desktop nav */}
