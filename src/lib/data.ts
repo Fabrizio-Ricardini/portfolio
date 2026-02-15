@@ -39,47 +39,38 @@ export const portfolioData = {
   personal: {
     name: "Fabrizio",
     role: "Full Stack Developer",
-    bio: "Passionate developer building digital experiences. Specialized in React, Node.js and Cloud Architecture.",
+    bio: "Soy un desarrollador enfocado en crear herramientas prácticas y aplicaciones web que reduzcan fricción para equipos y usuarios. Me gusta detectar dónde se pierde tiempo y convertir eso en automatización clara e interfaces simples.",
     contact: {
-      email: "fabrizio@example.com",
-      github: "https://github.com/fabrizio",
-      linkedin: "https://linkedin.com/in/fabrizio",
-      twitter: "https://twitter.com/fabrizio",
+      email: "fabrizio.ricardini@gmail.com",
+      github: "https://github.com/fabrizio-ricardini",
+      linkedin: "https://linkedin.com/in/fabrizio-ricardini",
     },
   },
   experience: [
     {
-      role: "Senior Frontend Engineer",
-      company: "TechFlow",
-      period: "2023 — Present",
+      role: "Tier II/III Support Analyst",
+      company: "FK {tech}",
+      period: "2024 — Present",
       description:
-        "Leading frontend architecture and performance optimization initiatives.",
+        "Soporte N2/N3 regional de integraciones e-commerce y logística. Liderazgo en monitoreo, diagnóstico de fallas (ELK/OpenSearch) y automatización de procesos operativos.",
       achievements: [
-        "Migrated legacy monolith to micro-frontends with Next.js",
-        "Improved Core Web Vitals by 40%",
-        "Mentored junior developers",
+        "Desarrollo de interfaz web de soporte (Node.js + Express + Tailwind) para estandarización y reducción de error humano.",
+        "Automatización AWS S3 (ETL): script automático que redujo el tiempo de procesamiento de archivos de ~1 hora a 5-10 minutos.",
+        "Automatización de diagnóstico: herramienta que compara configuraciones SQL para detectar errores automáticamente.",
+        "Generación de reportes y visualizador de configuraciones tipo 'Metabase' con filtros automáticos.",
+        "Scripts verificadores de tiendas: validación proactiva de APIs externas antes del alta.",
+        "Gestión de incidencias y requerimientos (Jira/InvGate) con seguimiento de casos recurrentes.",
+        "Monitoreo de órdenes integradas y métricas operativas en dashboards de Metabase.",
       ],
     },
     {
-      role: "Full Stack Developer",
-      company: "StartupX",
-      period: "2021 — 2023",
-      description: "Core developer for a high-growth SaaS platform.",
+      role: "Desarrollo Web Full Stack",
+      company: "JPMorgan | Artech | EducaciónIT | Fundación Pescar",
+      period: "2024-03 — 2024-10",
+      description: "Proyecto educativo (ChanGo): plataforma marketplace de servicios para conectar profesionales por oficio/conocimiento.",
       achievements: [
-        "Built MVP in 3 months",
-        "Implemented real-time features with WebSockets",
-        "Designed RESTful API with Node.js",
-      ],
-    },
-    {
-      role: "Junior Web Developer",
-      company: "Digital Agency",
-      period: "2019 — 2021",
-      description: "Delivered web solutions for diverse client base.",
-      achievements: [
-        "Developed 15+ client websites",
-        "Implemented pixel-perfect UIs",
-        "Automated CI/CD pipelines",
+        "PM/Developer: Liderazgo de planning, presentaciones y revisión de PRs.",
+        "Desarrollo de REST API (Node + Express + SQL Server) y diseño UI/UX en Figma.",
       ],
     },
   ],
@@ -91,7 +82,7 @@ export const portfolioData = {
       modern_desc:
         "A comprehensive e-commerce platform built with Next.js, Stripe, and PostgreSQL. Features include real-time inventory, cart management, and payment processing.",
       stack: ["React", "Node.js", "PostgreSQL", "Stripe"],
-      links: { repo: "#", demo: "#" },
+      links: { repo: "https://github.com/fabrizio-ricardini", demo: "https://github.com/fabrizio-ricardini" },
     },
     {
       id: "proj-2",
@@ -100,7 +91,7 @@ export const portfolioData = {
       modern_desc:
         "An intelligent chatbot powered by OpenAI API with context retention, multi-turn conversations, and embeddings-based knowledge retrieval.",
       stack: ["Python", "OpenAI", "FastAPI", "Redis"],
-      links: { repo: "#", demo: "#" },
+      links: { repo: "https://github.com/fabrizio-ricardini", demo: "https://github.com/fabrizio-ricardini" },
     },
     {
       id: "proj-3",
@@ -109,7 +100,7 @@ export const portfolioData = {
       modern_desc:
         "A dual-mode portfolio website featuring a terminal interface and a modern UI with seamless animated transitions between modes.",
       stack: ["Next.js", "Tailwind CSS", "Framer Motion"],
-      links: { repo: "#", demo: "#" },
+      links: { repo: "https://github.com/fabrizio-ricardini", demo: "https://github.com/fabrizio-ricardini" },
     },
     {
       id: "proj-4",
@@ -118,7 +109,7 @@ export const portfolioData = {
       modern_desc:
         "A blazing-fast CLI task manager written in Rust. Supports projects, tags, priorities, and syncs with GitHub Issues via the API.",
       stack: ["Rust", "Clap", "SQLite", "GitHub API"],
-      links: { repo: "#", demo: "#" },
+      links: { repo: "https://github.com/fabrizio-ricardini", demo: "https://github.com/fabrizio-ricardini" },
     },
   ] as Project[],
   fileSystem: [

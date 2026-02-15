@@ -1,28 +1,25 @@
 # about.md
 
-## Fabrizio — Full Stack Developer
+## Fabrizio — Developer
 
-> "First, solve the problem. Then, write the code." — John Johnson
-
-I'm a developer passionate about building performant web applications
-and crafting elegant user experiences. With 5+ years of experience
-shipping production software, I specialize in the React/Node.js
-ecosystem and cloud-native architectures.
+Soy un desarrollador enfocado en crear herramientas prácticas y aplicaciones web que reduzcan fricción para equipos y usuarios. Me gusta trabajar cerca de los procesos reales: detectar dónde se pierde tiempo y convertir eso en automatización clara e interfaces simples.
 
 ### Background
-Started coding at 16 with Python scripts to automate repetitive tasks.
-Quickly moved to web development and never looked back. Today I work
-across the full stack — from database design to pixel-perfect UIs.
 
-### Philosophy
-- Write code for humans first, machines second.
-- Ship early, iterate often.
-- Every abstraction has a cost; choose wisely.
+Arranqué con scripting y automatización, y esa mentalidad sigue guiando cómo construyo hoy: simplificar procesos, eliminar pasos manuales y hacer que los resultados sean fáciles de verificar. Con el tiempo me expandí al desarrollo web, combinando backend con UI/UX para entregar proyectos de punta a punta.
 
-### Currently
-- Building dual-mode portfolio experiences (you're looking at one).
-- Exploring AI-assisted development workflows.
-- Contributing to open source when time allows.
+### Filosofía
+
+* Priorizar claridad y mantenibilidad antes que lo “ingenioso”.
+* Automatizar lo repetitivo y dejar las decisiones importantes a las personas.
+* Construir mejoras pequeñas y medibles que se acumulen con el tiempo.
+
+### Actualmente
+
+* Desarrollando y mejorando herramientas de automatización para soporte (scripting + web UI).
+* Trabajando con herramientas basadas en LLM: prompt engineering y agent workflows para desarrollo y documentación.
+* Mejorando mi portfolio con proyectos reales, demos y resultados medibles.
 
 ---
-Last modified: 2026-02-12
+
+Last modified: 2026-02-15
