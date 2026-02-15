@@ -2,19 +2,20 @@
 
 import { useState } from "react";
 import { portfolioData, Project } from "@/lib/data";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Github,
   ExternalLink,
   Mail,
   Linkedin,
-  Twitter,
   MapPin,
   Clock,
   Code2,
   Layers,
   Wrench,
   ArrowRight,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import ProjectModal from "./ProjectModal";
 
@@ -33,28 +34,28 @@ const stagger = {
 
 const skillCategories = [
   {
-    title: "Languages",
+    title: "Lenguajes",
     icon: Code2,
-    items: ["TypeScript", "JavaScript", "Python", "SQL", "Rust"],
+    items: ["TypeScript", "JavaScript", "Python", "SQL", "HTML", "CSS"],
   },
   {
-    title: "Frontend",
+    title: "Frontend & Backend",
     icon: Layers,
     items: [
-      "React / Next.js / Remix",
-      "Tailwind CSS / CSS Modules",
-      "Framer Motion / GSAP",
-      "Zustand / React Query",
+      "React / Next.js",
+      "Tailwind CSS / Framer Motion",
+      "Node.js / Express",
+      "REST APIs / SQL Server",
     ],
   },
   {
-    title: "Backend & Tools",
+    title: "Data & Automatización",
     icon: Wrench,
     items: [
-      "Node.js / Express / Fastify",
-      "PostgreSQL / Redis / MongoDB",
-      "Docker / AWS / Vercel",
-      "Git / GitHub Actions / CI/CD",
+      "Metabase / OpenSearch / Elasticsearch",
+      "Automation / Scripting / AWS S3",
+      "LLM Tools / Agent Workflows",
+      "Git / Jira / Figma",
     ],
   },
 ];
@@ -71,22 +72,95 @@ const contactLinks = [
   {
     icon: Github,
     label: "GitHub",
-    value: "github.com/fabrizio",
+    value: "github.com/fabrizio-ricardini",
     href: portfolioData.personal.contact.github,
   },
   {
     icon: Linkedin,
     label: "LinkedIn",
-    value: "linkedin.com/in/fabrizio",
+    value: "linkedin.com/in/fabrizio-ricardini",
     href: portfolioData.personal.contact.linkedin,
   },
-  {
-    icon: Twitter,
-    label: "Twitter",
-    value: "twitter.com/fabrizio",
-    href: portfolioData.personal.contact.twitter,
-  },
 ];
+
+// ── Experience Item Component ────────────────────────────────────────
+
+type Job = typeof portfolioData.experience[number];
+
+function ExperienceItem({ job }: { job: Job }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const initialAchievements = job.achievements.slice(0, 2);
+  const remainingAchievements = job.achievements.slice(2);
+  const hasMore = remainingAchievements.length > 0;
+
+  return (
+    <motion.div
+      variants={fadeUp}
+      transition={{ duration: 0.4 }}
+      className="relative pl-8 border-l border-white/10"
+    >
+      {/* Timeline dot */}
+      <span className="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-modern-accent ring-4 ring-modern-bg" />
+
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+        <h3 className="text-xl font-bold text-modern-text">{job.role}</h3>
+        <span className="text-sm font-mono text-modern-accent bg-modern-accent/10 px-2 py-1 rounded w-fit mt-1 sm:mt-0">
+          {job.period}
+        </span>
+      </div>
+
+      <div className="text-lg text-modern-muted font-medium mb-3">
+        {job.company}
+      </div>
+
+      <p className="text-modern-muted mb-4">{job.description}</p>
+
+      <ul className="space-y-2">
+        {initialAchievements.map((item: string, i: number) => (
+          <li key={i} className="flex items-start gap-2 text-sm text-modern-muted/80">
+            <span className="text-modern-accent mt-1.5 text-[10px]">➢</span>
+            {item}
+          </li>
+        ))}
+        
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden space-y-2"
+            >
+              {remainingAchievements.map((item: string, i: number) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-modern-muted/80 pt-2">
+                  <span className="text-modern-accent mt-1.5 text-[10px]">➢</span>
+                  {item}
+                </li>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </ul>
+
+      {hasMore && (
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="mt-4 flex items-center gap-1.5 text-xs font-medium text-modern-accent hover:text-modern-accent/80 transition-colors cursor-pointer"
+        >
+          {isExpanded ? (
+            <>
+              Ver menos <ChevronUp size={14} />
+            </>
+          ) : (
+            <>
+              Ver más logros <ChevronDown size={14} />
+            </>
+          )}
+        </button>
+      )}
+    </motion.div>
+  );
+}
 
 // ── Section Heading ──────────────────────────────────────────────────
 
@@ -134,7 +208,7 @@ export default function ModernContent() {
               {portfolioData.personal.role}
             </p>
             <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-modern-text via-modern-text to-modern-accent leading-tight">
-              Hi, I&apos;m {portfolioData.personal.name}.
+              Hola, soy {portfolioData.personal.name}.
             </h1>
           </motion.div>
           <motion.p
@@ -155,14 +229,14 @@ export default function ModernContent() {
               href="#projects"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-modern-accent text-modern-accent-fg font-medium text-sm hover:bg-modern-accent/90 transition-colors shadow-lg shadow-modern-accent/20"
             >
-              View Projects
+              Ver Proyectos
               <ArrowRight size={16} />
             </a>
             <a
               href="#contact"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-modern-surface text-modern-text font-medium text-sm border border-modern-border hover:bg-modern-card-hover transition-colors"
             >
-              Get in Touch
+              Contacto
             </a>
           </motion.div>
         </section>
@@ -170,8 +244,8 @@ export default function ModernContent() {
         {/* ── Projects Section ─────────────────────────────────────── */}
         <section id="projects" className="scroll-mt-24">
           <SectionHeading
-            title="Projects"
-            subtitle="Selected work and side projects."
+            title="Proyectos"
+            subtitle="Trabajos seleccionados y proyectos paralelos."
           />
           <motion.div
             variants={stagger}
@@ -236,8 +310,8 @@ export default function ModernContent() {
         {/* ── About Section ────────────────────────────────────────── */}
         <section id="about" className="scroll-mt-24">
           <SectionHeading
-            title="About"
-            subtitle="A bit about who I am and what drives me."
+            title="Sobre mí"
+            subtitle="Un poco sobre quién soy y qué me impulsa."
           />
           <motion.div
             variants={stagger}
@@ -252,23 +326,11 @@ export default function ModernContent() {
               transition={{ duration: 0.4 }}
               className="space-y-4"
             >
-              <blockquote className="border-l-2 border-modern-accent/40 pl-4 italic text-modern-muted">
-                &ldquo;First, solve the problem. Then, write the code.&rdquo;
-                <span className="block text-xs mt-1 not-italic">
-                  &mdash; John Johnson
-                </span>
-              </blockquote>
               <p className="text-modern-text leading-relaxed">
-                I&apos;m a developer passionate about building performant web
-                applications and crafting elegant user experiences. With 5+ years of
-                experience shipping production software, I specialize in the
-                React/Node.js ecosystem and cloud-native architectures.
+                Soy un desarrollador enfocado en crear herramientas prácticas y aplicaciones web que reduzcan fricción para equipos y usuarios. Me gusta trabajar cerca de los procesos reales: detectar dónde se pierde tiempo y convertir eso en automatización clara e interfaces simples.
               </p>
               <p className="text-modern-muted leading-relaxed">
-                Started coding at 16 with Python scripts to automate repetitive
-                tasks. Quickly moved to web development and never looked back.
-                Today I work across the full stack — from database design to
-                pixel-perfect UIs.
+                Arranqué con scripting y automatización, y esa mentalidad sigue guiando cómo construyo hoy: simplificar procesos, eliminar pasos manuales y hacer que los resultados sean fáciles de verificar.
               </p>
             </motion.div>
 
@@ -280,39 +342,39 @@ export default function ModernContent() {
             >
               <div className="rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6">
                 <h4 className="font-semibold text-modern-text mb-3">
-                  Philosophy
+                  Filosofía
                 </h4>
                 <ul className="space-y-2 text-sm text-modern-muted">
                   <li className="flex items-start gap-2">
                     <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Write code for humans first, machines second.
+                    Priorizar claridad y mantenibilidad antes que lo “ingenioso”.
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Ship early, iterate often.
+                    Automatizar lo repetitivo y dejar decisiones importantes a las personas.
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Every abstraction has a cost; choose wisely.
+                    Construir mejoras pequeñas y medibles que se acumulen.
                   </li>
                 </ul>
               </div>
               <div className="rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6">
                 <h4 className="font-semibold text-modern-text mb-3">
-                  Currently
+                  Actualidad
                 </h4>
                 <ul className="space-y-2 text-sm text-modern-muted">
                   <li className="flex items-start gap-2">
                     <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Building dual-mode portfolio experiences.
+                    Mejorando herramientas de automatización (scripting + web UI).
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Exploring AI-assisted development workflows.
+                    Trabajando con LLMs: prompt engineering y agent workflows.
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Contributing to open source when time allows.
+                    Evolucionando este portfolio con proyectos y resultados reales.
                   </li>
                 </ul>
               </div>
@@ -322,7 +384,7 @@ export default function ModernContent() {
 
         {/* ── Experience Section ────────────────────────────────────── */}
         <section id="experience" className="scroll-mt-24">
-          <SectionHeading title="Experience" subtitle="My professional journey." />
+          <SectionHeading title="Experiencia" subtitle="Mi trayectoria profesional." />
           <motion.div
             variants={stagger}
             initial="initial"
@@ -331,42 +393,7 @@ export default function ModernContent() {
             className="space-y-8 max-w-3xl"
           >
             {portfolioData.experience.map((job, index) => (
-              <motion.div
-                key={index}
-                variants={fadeUp}
-                transition={{ duration: 0.4 }}
-                className="relative pl-8 border-l border-white/10"
-              >
-                {/* Timeline dot */}
-                <span className="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-modern-accent ring-4 ring-modern-bg" />
-
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
-                  <h3 className="text-xl font-bold text-modern-text">{job.role}</h3>
-                  <span className="text-sm font-mono text-modern-accent bg-modern-accent/10 px-2 py-1 rounded w-fit mt-1 sm:mt-0">
-                    {job.period}
-                  </span>
-                </div>
-
-                <div className="text-lg text-modern-muted font-medium mb-3">
-                  {job.company}
-                </div>
-
-                <p className="text-modern-muted mb-4">{job.description}</p>
-
-                <ul className="space-y-2">
-                  {job.achievements.map((item, i) => (
-                    <li
-                      key={i}
-                      className="flex items-start gap-2 text-sm text-modern-muted/80"
-                    >
-                      <span className="text-modern-accent mt-1.5 text-[10px]">
-                        ➢
-                      </span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+              <ExperienceItem key={index} job={job} />
             ))}
           </motion.div>
         </section>
@@ -374,8 +401,8 @@ export default function ModernContent() {
         {/* ── Skills Section ───────────────────────────────────────── */}
         <section id="skills" className="scroll-mt-24">
           <SectionHeading
-            title="Skills"
-            subtitle="Technologies and tools I work with."
+            title="Habilidades"
+            subtitle="Tecnologías y herramientas con las que trabajo."
           />
           <motion.div
             variants={stagger}
@@ -418,8 +445,8 @@ export default function ModernContent() {
         {/* ── Contact Section ──────────────────────────────────────── */}
         <section id="contact" className="scroll-mt-24">
           <SectionHeading
-            title="Contact"
-            subtitle="Let's build something together."
+            title="Contacto"
+            subtitle="Construyamos algo juntos."
           />
           <motion.div
             variants={stagger}
@@ -436,7 +463,7 @@ export default function ModernContent() {
             >
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Open to opportunities
+                Abierto a oportunidades
               </span>
               <span className="flex items-center gap-1.5">
                 <MapPin size={14} />
@@ -481,7 +508,7 @@ export default function ModernContent() {
               transition={{ duration: 0.4 }}
               className="mt-6 text-xs text-modern-muted"
             >
-              Average response time: ~24h
+              Tiempo medio de respuesta: ~24h
             </motion.p>
           </motion.div>
         </section>

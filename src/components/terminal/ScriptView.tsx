@@ -85,6 +85,32 @@ export default function ScriptView({ contentKey, filePath }: ScriptViewProps) {
     }
   };
 
+  const renderLogText = (text: string, type: LogEntry["type"]) => {
+    if (type !== "output") return text;
+
+    // Detect URLs and Emails
+    const urlRegex = /(https?:\/\/[^\s]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, i) => {
+      if (part.match(urlRegex)) {
+        const isEmail = part.includes("@") && !part.startsWith("http");
+        return (
+          <a
+            key={i}
+            href={isEmail ? `mailto:${part}` : part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-terminal-accent underline hover:text-white transition-colors cursor-pointer"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <article className="font-mono text-sm">
       <p className="text-terminal-secondary mb-1">
@@ -98,7 +124,7 @@ export default function ScriptView({ contentKey, filePath }: ScriptViewProps) {
         <code>
           {logs.map((log, index) => (
             <div key={index} className={`leading-7 ${getLogColor(log.type)}`}>
-              {log.text}
+              {renderLogText(log.text, log.type)}
             </div>
           ))}
         </code>
