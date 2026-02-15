@@ -2,10 +2,16 @@
 
 Este archivo define la hoja de ruta técnica y las reglas operativas para la construcción del Portfolio Personal con UI Híbrida (Terminal/Moderna).
 
-## 1. Objetivo del Proyecto
+## 1. Principios Fundamentales
+1.  **Seguridad Primero:** Nunca ejecutar comandos destructivos (`rm -rf`, `git reset --hard`) o exponer secretos (.env) sin confirmación explícita y análisis de impacto.
+2.  **Verificación Constante:** Asumir que el código puede fallar. Ejecutar linter y build antes de dar una tarea por finalizada.
+3.  **No Romper la Build:** La rama principal (`main`) siempre debe ser desplegable.
+4.  **Aprobación para Producción:** **REGLA CRÍTICA:** Nunca hacer push a la rama de producción o desplegar sin la aprobación explícita y final del usuario.
+
+## 2. Objetivo del Proyecto
 Crear una aplicación web que simule una experiencia de **Terminal Avanzada** (modo default) para desarrolladores, con la capacidad de transicionar fluidamente a una **UI Moderna** tipo landing page.
 
-## 2. Stack Tecnológico & Decisiones
+## 3. Stack Tecnológico & Decisiones
 *   **Core:** Next.js 16 (App Router) + TypeScript.
 *   **Estilos:** Tailwind CSS v4 + `clsx` + `tailwind-merge`.
 *   **Animaciones:** `framer-motion` (Crítico para `layoutId`, transiciones CRT y Typing Effects).
@@ -17,7 +23,7 @@ Crear una aplicación web que simule una experiencia de **Terminal Avanzada** (m
     *   Moderno: `Inter` (Google Fonts).
 *   **Estado:** React Context (`ViewModeContext` + `ActiveFileContext`).
 
-## 3. Arquitectura de Datos
+## 4. Arquitectura de Datos
 La "verdad" del contenido reside en `lib/data.ts`. No hay base de datos.
 *   **Estrategia:** Usar *templates* (lorem ipsum / datos mock) durante el desarrollo. Reemplazar con contenido real en Fase 7.
 *   **Estructura:**
@@ -25,7 +31,24 @@ La "verdad" del contenido reside en `lib/data.ts`. No hay base de datos.
     *   `projects`: Array de objetos con metadatos duales (terminal_desc / modern_desc).
     *   `fileContents`: Mapa de contenidos para archivos individuales (about, skills, contact).
 
-## 4. Plan de Implementación (Fases)
+## 5. Flujo de Trabajo del Agente
+
+### Fase A: Entendimiento
+1.  Leer `README.md` y estructura de carpetas.
+2.  Si la tarea es ambigua, **preguntar antes de actuar**.
+3.  Buscar código existente para mantener consistencia en estilos y patrones.
+
+### Fase B: Implementación
+1.  **Atomicidad:** Realizar cambios pequeños y testables.
+2.  **Dry Run:** Si la operación es compleja, explicar el plan antes de escribir código.
+3.  **Manejo de Errores:** Implementar `try/catch` o fronteras de error (Error Boundaries) en nuevas funcionalidades.
+
+### Fase C: Verificación
+1.  Ejecutar linter/formatter del proyecto.
+2.  Verificar que no haya errores de compilación (`npm run build` o equivalente).
+3.  Si se tocan tests, ejecutarlos para asegurar no regresión.
+
+## 6. Plan de Implementación (Fases)
 
 ### Fase 1: Inicialización (Completado)
 *   [x] Ejecutar `npx create-next-app@latest`.
@@ -53,6 +76,7 @@ La "verdad" del contenido reside en `lib/data.ts`. No hay base de datos.
 *   [x] **Project Details:** Modal con AnimatePresence al hacer clic en una tarjeta de proyecto.
 *   [x] **Glassmorphism:** Refinar estilos de Navbar y Cards (blur, bordes, sombras, tokens semánticos).
 *   [x] **Secciones:** About, Skills y Contact como secciones del modo moderno con scroll navigation.
+*   [x] **Experiencia:** Sección de Experience con timeline vertical.
 
 ### Fase 5: Visual Polish & FX (The "Wow") (Completado)
 *   [x] **CRT Turn-Off:** Efecto de apagado de monitor antiguo al salir de la terminal (línea blanca que colapsa al centro).
@@ -70,7 +94,65 @@ La "verdad" del contenido reside en `lib/data.ts`. No hay base de datos.
 *   [ ] Generar assets finales (imágenes de proyectos si aplica).
 *   [ ] SEO y metadata final.
 
-## 5. Reglas para Agentes
+## 7. Protocolo Git & Commits
+
+### Estándar: Conventional Commits
+Usar estrictamente el formato: `<tipo>(<scope>): <descripción>`
+*   `feat`: Nueva funcionalidad.
+*   `fix`: Corrección de errores.
+*   `docs`: Cambios en documentación.
+*   `style`: Formato, puntos y comas (sin cambios de lógica).
+*   `refactor`: Refactorización de código.
+*   `test`: Añadir o corregir tests.
+*   `chore`: Tareas de mantenimiento, build, herramientas.
+
+### Reglas de Git
+1.  **Commits Atómicos:** Un propósito lógico por commit. No mezclar refactors con features.
+2.  **Mensajes Claros:** Usar imperativo ("add" no "added").
+3.  **Ramas:**
+    *   Desarrollo en ramas nuevas (`feat/nombre-feature`) si la tarea es compleja.
+    *   Commit directo a `main` solo permitido en tareas triviales o si el usuario lo indica explícitamente.
+4.  **Push a Remoto:**
+    *   **STOP:** Antes de hacer `git push`, preguntar: "¿Deseas que suba los cambios al remoto?".
+    *   Nunca usar `--force` en ramas compartidas.
+
+## 8. Skills Disponibles
+
+Este agente tiene acceso a las siguientes skills especializadas.
+
+| Skill Name | Description |
+| :--- | :--- |
+| **writing-skills** | Use when creating new skills, editing existing skills, or verifying skills work before deployment. |
+| **writing-plans** | Use when you have a spec or requirements for a multi-step task, before touching code. |
+| **web-tailwind-ui** | Design or fix UI using semantic HTML and Tailwind CSS. |
+| **web-express-route** | Create or modify full-stack feature in Node/Express (Route + Controller + View). |
+| **verification-before-completion** | **Mandatory:** Use when claiming work is complete, fixed, or passing. Requires running verification commands and confirming output. |
+| **vercel-react-best-practices** | React and Next.js performance optimization guidelines from Vercel Engineering. |
+| **using-superpowers** | Use when starting any conversation - establishes how to find and use skills. |
+| **using-git-worktrees** | Use when starting feature work that needs isolation or before executing implementation plans. |
+| **ui-ux-pro-max** | UI/UX design intelligence. 50 styles, 21 palettes, font pairings, charts, stacks. Comprehensive design system knowledge. |
+| **test-driven-development** | Use when implementing any feature or bugfix, before writing implementation code. |
+| **tailwind-design-system** | Build scalable design systems with Tailwind CSS v4, tokens, and libraries. |
+| **systematic-debugging** | Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes. |
+| **subagent-driven-development** | Use when executing implementation plans with independent tasks in the current session. |
+| **requesting-code-review** | Use when completing tasks, implementing major features, or before merging. |
+| **receiving-code-review** | Use when receiving code review feedback, before implementing suggestions. |
+| **python-tkinter-gui** | Build or modify non-blocking desktop GUI (Tkinter/CustomTkinter). |
+| **python-script-logic** | Backend logic, data processing, or automation scripts in Python. |
+| **project-triage** | Use when the request is ambiguous, large, or requires analysis before coding. |
+| **next-best-practices** | Next.js best practices - file conventions, RSC boundaries, data patterns, async APIs, metadata, etc. |
+| **interface-design** | Design for dashboards, admin panels, apps, tools (not marketing sites). |
+| **implementation** | Use for generic code changes, small fixes, or refactors that don't have a specific skill. |
+| **git-commit** | Execute git commit with conventional commit message analysis, intelligent staging, and message generation. |
+| **frontend-design** | Create distinctive, production-grade frontend interfaces with high design quality. |
+| **finishing-a-development-branch** | Use when implementation is complete to decide integration strategy (merge, PR, cleanup). |
+| **executing-plans** | Use when you have a written implementation plan to execute in a separate session. |
+| **dispatching-parallel-agents** | Use when facing 2+ independent tasks that can be worked on without shared state. |
+| **crafting-effective-readmes** | Use when writing or improving README files with templates matched to audience. |
+| **changelog-generator** | Automatically creates user-facing changelogs from git commits. |
+| **brainstorming** | **Mandatory:** Use before any creative work - explores user intent, requirements, and design. |
+
+## 9. Reglas para Agentes (Específicas del Proyecto)
 1.  **Templates First:** No bloquearse por falta de contenido real. Usar placeholders descriptivos.
 2.  **Seguridad:** No ejecutar comandos destructivos sin confirmar.
 3.  **Consistencia:** Usar siempre las variables de color definidas en Tailwind, no hex codes hardcodeados.
@@ -78,7 +160,7 @@ La "verdad" del contenido reside en `lib/data.ts`. No hay base de datos.
 5.  **Clean Code:** Separación estricta: `components/terminal/` vs `components/modern/`. Componentes compartidos en `components/`.
 6.  **Tailwind v4:** No usar `tailwind.config.ts`. Los temas se definen en `globals.css` con `@theme inline`.
 
-## 6. Estándares de Testing (Playwright)
+## 10. Estándares de Testing (Playwright)
 Para mantener el repositorio ligero y la ejecución rápida, cualquier implementación de Playwright (o uso de @playwright/test) en este proyecto debe respetar estas reglas obligatorias:
 
 *  `headless: true` — Ejecutar siempre en modo headless (sin interfaz gráfica visible).
@@ -106,11 +188,3 @@ export default defineConfig({
   },
 });
 ```
-
-Reglas operativas para agentes:
-
-*  Si el agente necesita añadir pruebas E2E al repositorio, debe crear `playwright.config.ts` con la configuración anterior.
-*  Nunca habilitar screenshots, video o trace por defecto en PRs o runs locales sin permiso explícito del propietario.
-*  Si el agente ejecuta Playwright desde un entorno controlado (MCP/u otro runner externo), debe documentar en el PR/commit el motivo por el cual se omitieron estas reglas si aplica alguna excepción.
-
-Opcional: considerar crear una `skill` llamada `playwright-light` que encapsule estas reglas y ofrezca utilidades para generar un `playwright.config.ts` conforme a este estándar.
