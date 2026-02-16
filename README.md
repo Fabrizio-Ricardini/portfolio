@@ -1,68 +1,92 @@
-# Portfolio Personal (Dual Terminal/Modern UI)
+# Portfolio Dual UI (Terminal + Modern)
 
-> [!NOTE]
-> **Live Demo:** [Insertar Link de Deploy Aquí]
+Portfolio personal con dos experiencias de navegación: una terminal interactiva para perfil técnico y una interfaz moderna orientada a reclutadores/equipos de producto.
 
-![Preview del Proyecto](https://via.placeholder.com/800x400?text=Preview+Terminal+vs+Modern+UI)
-*Una experiencia inmersiva que transiciona entre una terminal de desarrollador y una landing page moderna.*
+- Live: `https://portfolio-fabrizio.vercel.app/`
+- Stack base: Next.js 16 + TypeScript + Tailwind CSS v4 + Framer Motion
 
----
+## Capturas
 
-## 🚀 Concepto
+### Modo Terminal
 
-Este proyecto no es solo un portfolio, es una demostración de ingeniería de frontend. Combina la nostalgia de las interfaces de línea de comandos (CLI) con la usabilidad del diseño web moderno.
+![Preview modo terminal](docs/assets/screenshots/terminal-mode.png)
 
-**El problema que resuelve:** Los portfolios de desarrolladores suelen ser aburridos o difíciles de navegar. Este diseño híbrido captura la atención técnica (Modo Terminal) mientras ofrece una experiencia accesible para reclutadores no técnicos (Modo Moderno).
+### Modo Moderno
 
-## ✨ Características Principales
+![Preview modo moderno](docs/assets/screenshots/modern-mode.png)
 
-*   **Dual UI System:** Transiciones fluidas entre modos usando `Framer Motion` (layout projection).
-*   **Simulación de Terminal Real:**
-    *   Sistema de archivos recursivo navegable.
-    *   Comandos funcionales simulados (`ls`, `cat`, scripts de contacto).
-    *   Efectos CRT, scanlines y "apagado de monitor" retro.
-*   **Modo Moderno (Recruiter Friendly):**
-    *   Diseño Glassmorphism limpio y accesible.
-    *   Tipografía optimizada (Inter vs JetBrains Mono).
-*   **Persistencia de Estado:** El contexto global mantiene tu "ubicación" en el sistema de archivos al cambiar de modo.
+## Características
+- Dual mode real: cambio entre `terminal` y `gui` con transición animada.
+- Terminal interactiva: file tree navegable, vistas de carpeta/archivo/script y prompt simulado.
+- Modo moderno: hero, proyectos, about, experiencia, skills y contacto con navegación por secciones.
+- Data centralizada: contenido compartido entre ambos modos desde `src/lib/data.ts`.
+- Efectos visuales: CRT, scanlines, ruido y escena ASCII con fallback y ajustes de performance.
+- Accesibilidad mejorada: navegación por teclado, modal con foco controlado, soporte `prefers-reduced-motion`.
+- Quality gates: workflow de CI con `lint` + `build`.
 
-## 🛠️ Stack Tecnológico & Decisiones
+## Estado actual
+- Build estable en `main`.
+- Deploy activo en Vercel.
+- README actualizado según la versión actualmente desplegada.
 
-*   **Core:** [Next.js 16](https://nextjs.org/) (App Router)
-    *   *Por qué:* Para aprovechar Server Components en la carga inicial y el enrutado robusto.
-*   **Estilos:** [Tailwind CSS v4](https://tailwindcss.com/)
-    *   *Por qué:* Uso de las nuevas variables CSS nativas para temas dinámicos y menor tamaño de bundle.
-*   **Animaciones:** [Framer Motion](https://www.framer.com/motion/)
-    *   *Por qué:* Indispensable para las animaciones `layoutId` que transforman físicamente la ventana de terminal en tarjetas modernas sin saltos de corte.
-*   **Iconos:** Lucide React
-    *   *Por qué:* Consistencia visual ligera y adaptable a ambos estilos.
+## Stack
+- Core: `next@16`, `react@19`, `typescript`
+- Styling: `tailwindcss@4`, `clsx`, `tailwind-merge`
+- Motion/UI: `framer-motion`, `lucide-react`
+- 3D/effects: `three`, `@react-three/fiber`, `@react-three/drei`, `@react-three/postprocessing`, `postprocessing`
+- Content render: `react-markdown`, `remark-gfm`, `rehype-highlight`
+- E2E toolchain: `@playwright/test` (config liviana: headless y artefactos off)
 
-## 📂 Arquitectura
+## Arquitectura
+- Fuente de verdad: `src/lib/data.ts`
+  - `fileSystem`: estructura recursiva para sidebar terminal
+  - `projects`: data de proyectos consumida en terminal y modo moderno
+  - `fileContents`: contenido de archivos markdown/scripts
+  - `modern`: bloques de about/skills/contact del modo moderno
+- Estado global:
+  - `src/context/ViewModeContext.tsx`
+  - `src/context/ActiveFileContext.tsx`
+- Separación de UI:
+  - `src/components/terminal/*`
+  - `src/components/modern/*`
+  - `src/components/effects/*`
 
-El proyecto evita la complejidad de una base de datos para mantener la velocidad, usando una "Base de Datos Estática" en `lib/data.ts`:
-
-*   **Virtual FileSystem:** Un árbol recursivo de objetos que define carpetas y archivos.
-*   **Renderers Dinámicos:** Componentes que saben cómo dibujar un archivo `.md`, `.sh` o una carpeta, desacoplando los datos de la vista.
-
-## 🧠 Retos y Aprendizajes
-
-*   **Layout Projection:** Lograr que la ventana de la terminal se "transforme" en el contenedor moderno requirió un uso avanzado de `AnimatePresence` y claves de layout compartidas.
-*   **Efectos CRT:** Implementar scanlines y distorsión RGB puramente con CSS y SVG filters sin impactar el rendimiento del scroll.
-
-## 🚀 Roadmap
-
-- [ ] Agregar soporte para comandos reales (`mkdir`, `touch`) en el navegador.
-- [ ] Integrar un "huevo de pascua" con un minijuego en la terminal.
-- [ ] Modo "Matrix" como tema alternativo.
-
-## 💻 Desarrollo Local
-
+## Desarrollo local
 ```bash
-# 1. Instalar dependencias
 npm install
-
-# 2. Iniciar servidor de desarrollo
 npm run dev
-
-# 3. Ver en http://localhost:3000
 ```
+
+App en `http://localhost:3000`.
+
+## Scripts
+```bash
+npm run dev     # desarrollo
+npm run lint    # eslint
+npm run build   # build de produccion
+npm run start   # servir build
+```
+
+## Calidad y verificacion
+- Lint y build deben pasar antes de merge/push.
+- CI en `.github/workflows/ci.yml` ejecuta:
+  - `npm ci`
+  - `npm run lint`
+  - `npm run build`
+
+## Playwright (reglas del proyecto)
+Configuracion orientada a ejecucion liviana:
+- `headless: true`
+- `screenshot: 'off'`
+- `video: 'off'`
+- `trace: 'off'`
+
+Ver `playwright.config.ts`.
+
+## Roadmap (pendiente)
+- Reemplazar contenido template por contenido final en `src/lib/data.ts`.
+- Ajustes SEO/metadata finales.
+- Ampliar cobertura E2E de flujos criticos (modo, modal, navegacion).
+
+## Licencia
+Uso personal.
