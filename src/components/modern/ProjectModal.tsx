@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useId, useRef } from "react";
 import { Project } from "@/lib/data";
 import { AnimatePresence, motion } from "framer-motion";
 import { Github, ExternalLink, X } from "lucide-react";
@@ -10,6 +11,54 @@ interface ProjectModalProps {
 }
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const titleId = useId();
+  const descriptionId = useId();
+
+  useEffect(() => {
+    if (!project) return;
+
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const activeElement = document.activeElement;
+
+      if (event.shiftKey && activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previousFocusRef.current?.focus();
+    };
+  }, [project, onClose]);
+
   return (
     <AnimatePresence>
       {project && (
@@ -35,6 +84,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
             >
               <div
+                ref={dialogRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={titleId}
+                aria-describedby={descriptionId}
                 className="relative w-full max-w-lg pointer-events-auto rounded-2xl bg-modern-bg/96 md:bg-modern-bg/90 backdrop-blur-none md:backdrop-blur-xl border border-white/10 shadow-2xl shadow-modern-accent/5 overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -43,6 +97,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
                 {/* Close button */}
                 <button
+                  ref={closeButtonRef}
                   onClick={onClose}
                   className="absolute top-4 right-4 p-1.5 rounded-lg text-modern-muted hover:text-modern-text hover:bg-white/5 transition-colors"
                   aria-label="Close modal"
@@ -53,12 +108,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 {/* Content */}
                 <div className="p-8">
                   {/* Title */}
-                  <h2 className="text-2xl font-bold text-modern-text mb-2 pr-8">
+                  <h2 id={titleId} className="text-2xl font-bold text-modern-text mb-2 pr-8">
                     {project.title}
                   </h2>
 
                   {/* Description */}
-                  <p className="text-modern-muted leading-relaxed mb-6">
+                  <p id={descriptionId} className="text-modern-muted leading-relaxed mb-6">
                     {project.modern_desc}
                   </p>
 

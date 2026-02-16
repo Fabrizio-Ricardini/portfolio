@@ -68,31 +68,33 @@ export default function FolderView({ folderPath }: FolderViewProps) {
       {/* Rows */}
       <ul>
         {rows.map((row) => (
-          <li
-            key={row.name}
-            className="flex hover:bg-terminal-border/30 cursor-pointer py-2.5 sm:py-1 px-1 rounded transition-colors group active:bg-terminal-border/40"
-            onClick={() => handleRowClick(row.item)}
-          >
-            <span className="w-28 text-terminal-secondary opacity-60 hidden md:block" aria-hidden="true">
-              {row.perms}
-            </span>
-            <span className="w-16 text-terminal-accent hidden lg:block" aria-hidden="true">
-              {row.user}
-            </span>
-            <span className="w-14 text-terminal-secondary hidden md:block" aria-hidden="true">
-              {row.size}
-            </span>
-            <span className="w-20 text-terminal-secondary hidden sm:block" aria-hidden="true">
-              {row.date}
-            </span>
-            <span className="flex-1 text-terminal-text group-hover:text-terminal-accent transition-colors font-bold">
-              {row.name}
-              {row.stack.length > 0 && (
-                <span className="ml-2 text-terminal-secondary font-normal opacity-50 group-hover:opacity-100 transition-opacity text-xs">
-                  [{row.stack.join(", ")}]
-                </span>
-              )}
-            </span>
+          <li key={row.name}>
+            <button
+              type="button"
+              className="group flex w-full text-left hover:bg-terminal-border/30 cursor-pointer py-2.5 sm:py-1 px-1 rounded transition-colors active:bg-terminal-border/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terminal-accent/60"
+              onClick={() => handleRowClick(row.item)}
+            >
+              <span className="w-28 text-terminal-secondary opacity-60 hidden md:block" aria-hidden="true">
+                {row.perms}
+              </span>
+              <span className="w-16 text-terminal-accent hidden lg:block" aria-hidden="true">
+                {row.user}
+              </span>
+              <span className="w-14 text-terminal-secondary hidden md:block" aria-hidden="true">
+                {row.size}
+              </span>
+              <span className="w-20 text-terminal-secondary hidden sm:block" aria-hidden="true">
+                {row.date}
+              </span>
+              <span className="flex-1 text-terminal-text group-hover:text-terminal-accent transition-colors font-bold">
+                {row.name}
+                {row.stack.length > 0 && (
+                  <span className="ml-2 text-terminal-secondary font-normal opacity-50 group-hover:opacity-100 transition-opacity text-xs">
+                    [{row.stack.join(", ")}]
+                  </span>
+                )}
+              </span>
+            </button>
           </li>
         ))}
       </ul>

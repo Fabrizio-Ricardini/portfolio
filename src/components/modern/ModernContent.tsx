@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { portfolioData, Project } from "@/lib/data";
+import { type ComponentType, type KeyboardEvent, useEffect, useState } from "react";
+import { portfolioData, type ModernSkillIcon, Project } from "@/lib/data";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Github,
@@ -30,35 +30,11 @@ const stagger = {
   animate: { transition: { staggerChildren: 0.08 } },
 };
 
-// ── Skills Data (parsed from fileContents for modern display) ────────
-
-const skillCategories = [
-  {
-    title: "Lenguajes",
-    icon: Code2,
-    items: ["TypeScript", "JavaScript", "Python", "SQL", "HTML", "CSS"],
-  },
-  {
-    title: "Frontend & Backend",
-    icon: Layers,
-    items: [
-      "React / Next.js",
-      "Tailwind CSS / Framer Motion",
-      "Node.js / Express",
-      "REST APIs / SQL Server",
-    ],
-  },
-  {
-    title: "Data & Automatización",
-    icon: Wrench,
-    items: [
-      "Metabase / OpenSearch / Elasticsearch",
-      "Automation / Scripting / AWS S3",
-      "LLM Tools / Agent Workflows",
-      "Git / Jira / Figma",
-    ],
-  },
-];
+const skillIconMap: Record<ModernSkillIcon, ComponentType<{ size?: number }>> = {
+  code2: Code2,
+  layers: Layers,
+  wrench: Wrench,
+};
 
 // ── Contact Data ─────────────────────────────────────────────────────
 
@@ -72,13 +48,13 @@ const contactLinks = [
   {
     icon: Github,
     label: "GitHub",
-    value: "github.com/fabrizio-ricardini",
+    value: portfolioData.personal.contact.github.replace("https://", ""),
     href: portfolioData.personal.contact.github,
   },
   {
     icon: Linkedin,
     label: "LinkedIn",
-    value: "linkedin.com/in/fabrizio-ricardini",
+    value: portfolioData.personal.contact.linkedin.replace("https://", ""),
     href: portfolioData.personal.contact.linkedin,
   },
 ];
@@ -225,6 +201,17 @@ export default function ModernContent() {
     ? { delay: 0.05, duration: 0.2 }
     : { delay: 0.3, duration: 0.5 };
   const itemTransition = reduceMotion ? { duration: 0.2 } : { duration: 0.4 };
+  const skillCategories = portfolioData.modern.skills.map((category) => ({
+    ...category,
+    icon: skillIconMap[category.icon],
+  }));
+  const openProject = (project: Project) => setSelectedProject(project);
+  const handleProjectCardKeyDown = (event: KeyboardEvent<HTMLElement>, project: Project) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openProject(project);
+    }
+  };
 
   return (
     <>
@@ -287,11 +274,15 @@ export default function ModernContent() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {portfolioData.projects.map((project) => (
-              <motion.div
+              <motion.article
                 key={project.id}
                 variants={fadeUp}
                 transition={itemTransition}
-                onClick={() => setSelectedProject(project)}
+                onClick={() => openProject(project)}
+                onKeyDown={(event) => handleProjectCardKeyDown(event, project)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Open details for ${project.title}`}
                 className="group cursor-pointer rounded-2xl bg-white/5 backdrop-blur-none md:backdrop-blur-md p-6 border border-white/10 hover:border-modern-accent/30 shadow-sm md:hover:shadow-lg md:hover:shadow-modern-accent/5 transition-colors duration-300 h-full flex flex-col"
               >
                 <div className="flex justify-between items-start mb-4">
@@ -334,7 +325,7 @@ export default function ModernContent() {
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </motion.div>
         </section>
@@ -359,10 +350,10 @@ export default function ModernContent() {
               className="space-y-4"
             >
               <p className="text-modern-text leading-relaxed">
-                Soy un desarrollador enfocado en crear herramientas prácticas y aplicaciones web que reduzcan fricción para equipos y usuarios. Me gusta trabajar cerca de los procesos reales: detectar dónde se pierde tiempo y convertir eso en automatización clara e interfaces simples.
+                {portfolioData.modern.about.intro[0]}
               </p>
               <p className="text-modern-muted leading-relaxed">
-                Arranqué con scripting y automatización, y esa mentalidad sigue guiando cómo construyo hoy: simplificar procesos, eliminar pasos manuales y hacer que los resultados sean fáciles de verificar.
+                {portfolioData.modern.about.intro[1]}
               </p>
             </motion.div>
 
@@ -377,18 +368,12 @@ export default function ModernContent() {
                   Filosofía
                 </h4>
                 <ul className="space-y-2 text-sm text-modern-muted">
-                  <li className="flex items-start gap-2">
-                    <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Priorizar claridad y mantenibilidad antes que lo “ingenioso”.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Automatizar lo repetitivo y dejar decisiones importantes a las personas.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Construir mejoras pequeñas y medibles que se acumulen.
-                  </li>
+                  {portfolioData.modern.about.philosophy.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span className="text-modern-accent mt-0.5">&#8226;</span>
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6">
@@ -396,18 +381,12 @@ export default function ModernContent() {
                   Actualidad
                 </h4>
                 <ul className="space-y-2 text-sm text-modern-muted">
-                  <li className="flex items-start gap-2">
-                    <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Mejorando herramientas de automatización (scripting + web UI).
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Trabajando con LLMs: prompt engineering y agent workflows.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-modern-accent mt-0.5">&#8226;</span>
-                    Evolucionando este portfolio con proyectos y resultados reales.
-                  </li>
+                  {portfolioData.modern.about.current.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span className="text-modern-accent mt-0.5">&#8226;</span>
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </motion.div>
@@ -495,15 +474,15 @@ export default function ModernContent() {
             >
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Abierto a oportunidades
+                {portfolioData.modern.availability.openToOpportunitiesLabel}
               </span>
               <span className="flex items-center gap-1.5">
                 <MapPin size={14} />
-                Buenos Aires, AR
+                {portfolioData.modern.availability.location}
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock size={14} />
-                UTC-3
+                {portfolioData.modern.availability.timezone}
               </span>
             </motion.div>
 
@@ -540,7 +519,7 @@ export default function ModernContent() {
               transition={itemTransition}
               className="mt-6 text-xs text-modern-muted"
             >
-              Tiempo medio de respuesta: ~24h
+              {portfolioData.modern.availability.responseTimeLabel}
             </motion.p>
           </motion.div>
         </section>

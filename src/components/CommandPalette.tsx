@@ -169,7 +169,7 @@ export default function CommandPalette() {
             transition={{ duration: 0.2 }}
             className="fixed top-[20%] left-1/2 -translate-x-1/2 z-[70] w-full max-w-lg p-2"
           >
-            <div className="bg-[#0a0a0a]/95 backdrop-blur-md rounded-xl shadow-2xl overflow-hidden border border-[var(--terminal-border)] flex flex-col ring-1 ring-white/10">
+            <div className="bg-terminal-bg/95 backdrop-blur-md rounded-xl shadow-2xl overflow-hidden border border-terminal-border flex flex-col ring-1 ring-terminal-border/60">
               {/* Search Input */}
               <div className="flex items-center px-4 py-3 border-b border-[var(--terminal-border)]">
                 <Search className="w-5 h-5 text-[var(--terminal-accent)] mr-3 opacity-70" />
@@ -178,7 +178,7 @@ export default function CommandPalette() {
                   autoFocus
                   type="text"
                   placeholder="Type a command..."
-                  className="flex-1 bg-transparent outline-none text-zinc-100 placeholder-zinc-500 font-mono text-sm"
+                  className="flex-1 bg-transparent outline-none text-terminal-text placeholder-terminal-secondary font-mono text-sm"
                   value={query}
                   onChange={(e) => {
                     setQuery(e.target.value);
@@ -186,7 +186,7 @@ export default function CommandPalette() {
                   }}
                   onKeyDown={handlePaletteKeyDown}
                 />
-                <div className="text-[10px] font-mono text-zinc-500 border border-zinc-800 bg-zinc-900/50 px-2 py-1 rounded">
+                <div className="text-[10px] font-mono text-terminal-secondary border border-terminal-border bg-terminal-bg/70 px-2 py-1 rounded">
                   ESC
                 </div>
               </div>
@@ -194,7 +194,7 @@ export default function CommandPalette() {
               {/* Results */}
               <div className="max-h-[300px] overflow-y-auto py-2">
                 {filteredCommands.length === 0 ? (
-                  <div className="px-4 py-8 text-center text-zinc-500 text-sm font-mono">
+                  <div className="px-4 py-8 text-center text-terminal-secondary text-sm font-mono">
                     No results found.
                   </div>
                 ) : (
@@ -209,18 +209,18 @@ export default function CommandPalette() {
                           onMouseEnter={() => setSelectedIndex(index)}
                           className={`w-full flex items-center px-3 py-2.5 rounded-md text-sm transition-all duration-200 border-l-2 ${
                             index === selectedIndex
-                              ? "bg-white/5 border-[var(--terminal-accent)] text-white pl-4" // Active state
-                              : "border-transparent text-zinc-400 hover:bg-white/5 pl-3" // Default state
-                          }`}
-                        >
-                          <cmd.icon 
-                            className={`w-4 h-4 mr-3 transition-colors ${
-                              index === selectedIndex ? "text-[var(--terminal-accent)]" : "text-zinc-600"
-                            }`} 
-                          />
+                              ? "bg-white/5 border-terminal-accent text-terminal-text pl-4"
+                              : "border-transparent text-terminal-secondary hover:bg-white/5 pl-3"
+                           }`}
+                         >
+                           <cmd.icon 
+                             className={`w-4 h-4 mr-3 transition-colors ${
+                               index === selectedIndex ? "text-terminal-accent" : "text-terminal-secondary"
+                             }`} 
+                           />
                           <span className="flex-1 text-left font-mono">{cmd.label}</span>
                           {index === selectedIndex && (
-                            <span className="text-xs text-[var(--terminal-accent)] opacity-60 font-mono">↵</span>
+                            <span className="text-xs text-terminal-accent opacity-60 font-mono">↵</span>
                           )}
                         </button>
                       </li>
@@ -230,7 +230,7 @@ export default function CommandPalette() {
               </div>
               
               {/* Footer */}
-              <div className="px-4 py-2 bg-black/40 border-t border-[var(--terminal-border)] text-[10px] text-zinc-600 font-mono flex justify-between uppercase tracking-wider">
+              <div className="px-4 py-2 bg-terminal-bg/40 border-t border-terminal-border text-[10px] text-terminal-secondary font-mono flex justify-between uppercase tracking-wider">
                 <span>Navigate: ↑↓</span>
                 <span>Select: Enter</span>
               </div>

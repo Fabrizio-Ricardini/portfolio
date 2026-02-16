@@ -51,8 +51,9 @@ const FileTreeItem = ({
 
   return (
     <div>
-      <div
-        className={`flex items-center cursor-pointer py-3 md:py-1 select-none text-sm group transition-colors glitch-hover min-h-[44px] md:min-h-0 ${
+      <button
+        type="button"
+        className={`flex w-full items-center text-left cursor-pointer py-3 md:py-1 select-none text-sm group transition-colors glitch-hover min-h-[44px] md:min-h-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terminal-accent/60 ${
           isActive
             ? "bg-terminal-accent/15 text-terminal-accent"
             : "hover:bg-terminal-border/30"
@@ -76,7 +77,7 @@ const FileTreeItem = ({
         >
           {item.name}
         </span>
-      </div>
+      </button>
       {item.type === "folder" && isOpen && item.children && (
         <div>
           {item.children.map((child, index) => (
@@ -98,12 +99,13 @@ export default function FileTree() {
 
   return (
     <div className="text-terminal-text font-mono">
-      <div
-        className="flex items-center cursor-pointer py-3 md:py-1 px-1 mb-1 text-xs text-terminal-secondary hover:text-terminal-accent transition-colors select-none min-h-[44px] md:min-h-0"
+      <button
+        type="button"
+        className="flex w-full items-center text-left cursor-pointer py-3 md:py-1 px-1 mb-1 text-xs text-terminal-secondary hover:text-terminal-accent transition-colors select-none min-h-[44px] md:min-h-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terminal-accent/60"
         onClick={() => setActiveView({ type: "home" })}
       >
         ~ (root)
-      </div>
+      </button>
       {portfolioData.fileSystem.map((item, index) => (
         <FileTreeItem key={index} item={item} />
       ))}
