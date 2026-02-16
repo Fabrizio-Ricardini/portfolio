@@ -1,12 +1,12 @@
 "use client"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { EffectComposer } from "@react-three/postprocessing"
 import { Vector2, Mesh } from "three"
 import { AsciiEffect } from "./ascii-effect"
 
 // ── Animated torus knot (rotates continuously) ─────────────────────
-function RotatingTorusKnot() {
+function RotatingTorusKnot({ color }: { color: string }) {
   const meshRef = useRef<Mesh>(null)
 
   useFrame((_state, delta) => {
@@ -19,7 +19,7 @@ function RotatingTorusKnot() {
   return (
     <mesh ref={meshRef} scale={1.5} rotation={[0, 0, 0]}>
       <torusKnotGeometry args={[0.8, 0.3, 100, 16]} />
-      <meshStandardMaterial color="#917aff" roughness={0.3} metalness={0.1} />
+      <meshStandardMaterial color={color} roughness={0.3} metalness={0.1} />
     </mesh>
   )
 }
@@ -28,6 +28,51 @@ export function EffectScene() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [mousePos, setMousePos] = useState(new Vector2(0, 0))
   const [resolution, setResolution] = useState(new Vector2(1920, 1080))
+  const [sceneBackground] = useState(() => {
+    if (typeof window === "undefined") return "#0a0a0a"
+    const value = window
+      .getComputedStyle(document.documentElement)
+      .getPropertyValue("--terminal-bg")
+      .trim()
+    return value || "#0a0a0a"
+  })
+  const [sceneAccent] = useState(() => {
+    if (typeof window === "undefined") return "#c084fc"
+    const value = window
+      .getComputedStyle(document.documentElement)
+      .getPropertyValue("--terminal-accent")
+      .trim()
+    return value || "#c084fc"
+  })
+
+  const postfx = useMemo(
+    () => ({
+      scanlineIntensity: 0,
+      scanlineCount: 200,
+      targetFPS: 0,
+      jitterIntensity: 0,
+      jitterSpeed: 1,
+      mouseGlowEnabled: false,
+      mouseGlowRadius: 200,
+      mouseGlowIntensity: 1.5,
+      vignetteIntensity: 0,
+      vignetteRadius: 0.8,
+      colorPalette: 0,
+      curvature: 0,
+      aberrationStrength: 0,
+      noiseIntensity: 0,
+      noiseScale: 1,
+      noiseSpeed: 1,
+      waveAmplitude: 0,
+      waveFrequency: 10,
+      waveSpeed: 1,
+      glitchIntensity: 0,
+      glitchFrequency: 0,
+      brightnessAdjust: 0,
+      contrastAdjust: 1,
+    }),
+    []
+  )
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -63,16 +108,16 @@ export function EffectScene() {
     <div ref={containerRef} className="w-full h-full">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 50 }}
-        style={{ background: "#000000" }}
+        style={{ background: sceneBackground }}
       >
-        <color attach="background" args={["#000000"]} />
+        <color attach="background" args={[sceneBackground]} />
         {/* Lighting */}
         <hemisphereLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={2} />
         <directionalLight position={[-5, 3, -5]} intensity={1.2} />
         
         {/* Animated 3D Model */}
-        <RotatingTorusKnot />
+        <RotatingTorusKnot color={sceneAccent} />
         
         {/* ASCII Effect with PostFX */}
         <EffectComposer>
@@ -83,31 +128,7 @@ export function EffectScene() {
             color={true}
             resolution={resolution}
             mousePos={mousePos}
-            postfx={{
-              scanlineIntensity: 0,
-              scanlineCount: 200,
-              targetFPS: 0,
-              jitterIntensity: 0,
-              jitterSpeed: 1,
-              mouseGlowEnabled: false,
-              mouseGlowRadius: 200,
-              mouseGlowIntensity: 1.5,
-              vignetteIntensity: 0,
-              vignetteRadius: 0.8,
-              colorPalette: 0, // "original" is not a valid enum value in shader, using 0
-              curvature: 0,
-              aberrationStrength: 0,
-              noiseIntensity: 0,
-              noiseScale: 1,
-              noiseSpeed: 1,
-              waveAmplitude: 0,
-              waveFrequency: 10,
-              waveSpeed: 1,
-              glitchIntensity: 0,
-              glitchFrequency: 0,
-              brightnessAdjust: 0,
-              contrastAdjust: 1,
-            }}
+            postfx={postfx}
           />
         </EffectComposer>
       </Canvas>

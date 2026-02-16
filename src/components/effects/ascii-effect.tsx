@@ -1,5 +1,5 @@
 "use client"
-import { forwardRef, useMemo } from "react"
+import { forwardRef, useEffect, useMemo } from "react"
 import { Effect, BlendFunction } from "postprocessing"
 import { Uniform, Vector2 } from "three"
 
@@ -332,6 +332,54 @@ class AsciiEffectImpl extends Effect {
     this._asciiStyle = style
     this._resolution = resolution
     this._mousePos = mousePos
+    this.applyPostFX(postfx)
+  }
+
+  setCoreOptions(options: {
+    cellSize?: number
+    invert?: boolean
+    color?: boolean
+    style?: number
+    resolution?: Vector2
+    mousePos?: Vector2
+  }) {
+    if (typeof options.cellSize === "number") this._cellSize = options.cellSize
+    if (typeof options.invert === "boolean") this._invert = options.invert
+    if (typeof options.color === "boolean") this._colorMode = options.color
+    if (typeof options.style === "number") this._asciiStyle = options.style
+    if (options.resolution) this._resolution = options.resolution
+    if (options.mousePos) this._mousePos = options.mousePos
+  }
+
+  applyPostFX(postfx: AsciiPostFX = {}) {
+    const apply = (name: string, value: unknown) => {
+      const uniform = this.uniforms.get(name)
+      if (uniform) uniform.value = value
+    }
+
+    apply("scanlineIntensity", postfx.scanlineIntensity ?? 0)
+    apply("scanlineCount", postfx.scanlineCount ?? 200)
+    apply("targetFPS", postfx.targetFPS ?? 0)
+    apply("jitterIntensity", postfx.jitterIntensity ?? 0)
+    apply("jitterSpeed", postfx.jitterSpeed ?? 1)
+    apply("mouseGlowEnabled", postfx.mouseGlowEnabled ?? false)
+    apply("mouseGlowRadius", postfx.mouseGlowRadius ?? 200)
+    apply("mouseGlowIntensity", postfx.mouseGlowIntensity ?? 1.5)
+    apply("vignetteIntensity", postfx.vignetteIntensity ?? 0)
+    apply("vignetteRadius", postfx.vignetteRadius ?? 0.8)
+    apply("colorPalette", postfx.colorPalette ?? 0)
+    apply("curvature", postfx.curvature ?? 0)
+    apply("aberrationStrength", postfx.aberrationStrength ?? 0)
+    apply("noiseIntensity", postfx.noiseIntensity ?? 0)
+    apply("noiseScale", postfx.noiseScale ?? 1)
+    apply("noiseSpeed", postfx.noiseSpeed ?? 1)
+    apply("waveAmplitude", postfx.waveAmplitude ?? 0)
+    apply("waveFrequency", postfx.waveFrequency ?? 10)
+    apply("waveSpeed", postfx.waveSpeed ?? 1)
+    apply("glitchIntensity", postfx.glitchIntensity ?? 0)
+    apply("glitchFrequency", postfx.glitchFrequency ?? 0)
+    apply("brightnessAdjust", postfx.brightnessAdjust ?? 0)
+    apply("contrastAdjust", postfx.contrastAdjust ?? 1)
   }
 
   update(_renderer: any, _inputBuffer: any, deltaTime: number) {
@@ -389,6 +437,14 @@ export const AsciiEffect = forwardRef<any, AsciiEffectProps>((props, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
+
+  useEffect(() => {
+    effect.setCoreOptions({ cellSize, invert, color, style: styleNum, resolution, mousePos })
+  }, [cellSize, color, effect, invert, mousePos, resolution, styleNum])
+
+  useEffect(() => {
+    effect.applyPostFX(postfx)
+  }, [effect, postfx])
 
   return <primitive ref={ref} object={effect} dispose={null} />
 })

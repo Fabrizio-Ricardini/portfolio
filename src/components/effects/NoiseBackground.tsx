@@ -16,26 +16,47 @@ import { useEffect, useRef } from "react";
  */
 export default function NoiseBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const overlay = overlayRef.current;
-    if (!canvas || !overlay) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const offscreen = document.createElement("canvas");
     const SIZE = 128;
-    canvas.width = SIZE;
-    canvas.height = SIZE;
+    offscreen.width = SIZE;
+    offscreen.height = SIZE;
 
-    const imageData = ctx.createImageData(SIZE, SIZE);
+    const offscreenCtx = offscreen.getContext("2d");
+    if (!offscreenCtx) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    const imageData = offscreenCtx.createImageData(SIZE, SIZE);
     const data = imageData.data;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let animFrameId: number;
+    let animFrameId = 0;
     let lastTime = 0;
     const INTERVAL = 125; // ~8 FPS
+
+    const drawFrame = () => {
+      offscreenCtx.putImageData(imageData, 0, 0);
+      const pattern = ctx.createPattern(offscreen, "repeat");
+      if (!pattern) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = pattern;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
 
     function generateNoise(timestamp: number) {
       animFrameId = requestAnimationFrame(generateNoise);
@@ -52,33 +73,34 @@ export default function NoiseBackground() {
         data[i + 3] = 18; // A — very subtle (max 255)
       }
 
-      ctx!.putImageData(imageData, 0, 0);
-
-      // Convert to data URL and set as tiled background
-      overlay!.style.backgroundImage = `url(${canvas!.toDataURL("image/png")})`;
+      drawFrame();
     }
 
-    animFrameId = requestAnimationFrame(generateNoise);
+    if (prefersReducedMotion) {
+      for (let i = 0; i < data.length; i += 4) {
+        const v = Math.random() * 255;
+        data[i] = v;
+        data[i + 1] = v;
+        data[i + 2] = v;
+        data[i + 3] = 18;
+      }
+      drawFrame();
+    } else {
+      animFrameId = requestAnimationFrame(generateNoise);
+    }
 
     return () => {
-      cancelAnimationFrame(animFrameId);
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      window.removeEventListener("resize", resize);
     };
   }, []);
 
   return (
     <>
-      {/* Hidden canvas for noise generation */}
+      {/* Visible canvas for tiled noise rendering */}
       <canvas
         ref={canvasRef}
-        className="hidden"
-        aria-hidden="true"
-      />
-
-      {/* Noise overlay — tiled across container */}
-      <div
-        ref={overlayRef}
-        className="pointer-events-none absolute inset-0 z-0 bg-repeat"
-        style={{ backgroundSize: "128px 128px" }}
+        className="pointer-events-none absolute inset-0 z-0"
         aria-hidden="true"
       />
 
