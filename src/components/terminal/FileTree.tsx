@@ -98,7 +98,7 @@ export default function FileTree() {
   const { setActiveView } = useActiveFile();
 
   return (
-    <div className="text-terminal-text font-mono">
+    <div className="h-full bg-terminal-bg text-terminal-text font-mono">
       <button
         type="button"
         className="flex w-full items-center text-left cursor-pointer py-3 md:py-1 px-1 mb-1 text-xs text-terminal-secondary hover:text-terminal-accent transition-colors select-none min-h-[44px] md:min-h-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terminal-accent/60"

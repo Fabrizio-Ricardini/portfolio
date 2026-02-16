@@ -81,7 +81,10 @@ export default function TerminalLayout() {
             <X size={16} />
           </button>
         </div>
-        <div onClick={() => setSidebarOpen(false)}>
+        <div
+          className="flex-1 min-h-0 overflow-y-auto bg-terminal-bg"
+          onClick={() => setSidebarOpen(false)}
+        >
           <FileTree />
         </div>
       </aside>
