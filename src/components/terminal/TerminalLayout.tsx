@@ -46,7 +46,7 @@ export default function TerminalLayout() {
   }, []);
 
   return (
-    <div className="relative flex min-h-screen min-h-dvh w-full bg-terminal-bg text-terminal-text font-mono overflow-hidden crt-glow">
+    <div className="relative flex h-screen min-h-dvh w-full bg-terminal-bg text-terminal-text font-mono overflow-hidden crt-glow">
       {/* Scanlines overlay */}
       {showVisualEffects && <Scanlines />}
 
@@ -61,7 +61,7 @@ export default function TerminalLayout() {
       {/* Sidebar — desktop: static, mobile: slide-in */}
       <aside
         className={`
-          fixed md:relative z-40 top-0 left-0 h-full w-64
+          fixed md:relative z-40 top-0 left-0 h-full w-64 shrink-0
           border-r border-terminal-border p-4 flex flex-col bg-terminal-bg
           transition-transform duration-200 ease-out
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
