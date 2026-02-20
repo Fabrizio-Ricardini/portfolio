@@ -312,7 +312,7 @@ export default function ModernContent() {
                     </a>
                   </div>
                 </div>
-                <p className="text-modern-muted text-sm mb-4 line-clamp-3 flex-grow">
+                <p className="text-modern-muted text-sm mb-4 line-clamp-4 lg:line-clamp-5 flex-grow">
                   {project.modern_desc}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-auto">
