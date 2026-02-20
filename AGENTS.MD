@@ -54,11 +54,12 @@ Active ADRs:
 
 ## 7) Verification Matrix (Repository Commands)
 - **Lint:** npm run lint
-- **Tests:** not-configured
+- **Tests:** not-configured (no unit/integration gate enforced yet)
 - **Build:** npm run build
-- **E2E (if applicable):** not-configured
+- **E2E (if applicable):** not-configured as mandatory gate (Playwright tooling is present)
 
 > If commands are unknown, use `not-configured` and record the decision in ADR 0002.
+> Current posture: `@playwright/test` and `playwright.config.ts` are installed for incremental adoption, but CI gating is still lint + build.
 
 ## 8) Git Protocol & Commits
 - Conventional Commits: `<type>(<scope>): <description>`

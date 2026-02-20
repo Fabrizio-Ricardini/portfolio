@@ -69,17 +69,21 @@ npm run start   # servir build
 
 ## Calidad y verificacion
 - Lint y build deben pasar antes de merge/push.
+- Unit/integration tests aun no estan configurados como gate obligatorio.
+- E2E aun no es gate obligatorio; la adopcion es incremental.
 - CI en `.github/workflows/ci.yml` ejecuta:
   - `npm ci`
   - `npm run lint`
   - `npm run build`
 
 ## Playwright (reglas del proyecto)
-Configuracion orientada a ejecucion liviana:
+Tooling presente para adopcion incremental, con configuracion orientada a ejecucion liviana:
 - `headless: true`
 - `screenshot: 'off'`
 - `video: 'off'`
 - `trace: 'off'`
+
+Estado actual: no hay suite E2E obligatoria en CI.
 
 Ver `playwright.config.ts`.
 
