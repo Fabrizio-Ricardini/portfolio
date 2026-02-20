@@ -135,40 +135,40 @@ export const portfolioData = {
   ],
   projects: [
     {
-      id: "proj-1",
-      title: "E-commerce Platform",
-      terminal_desc: "drwxr-xr-x  12K  Jan 15  build/",
+      id: "proj-fundacion-pescar",
+      title: "ChanGo!",
+      terminal_desc: "drwxr-xr-x  18K  2024  chango-marketplace/",
       modern_desc:
-        "A comprehensive e-commerce platform built with Next.js, Stripe, and PostgreSQL. Features include real-time inventory, cart management, and payment processing.",
-      stack: ["React", "Node.js", "PostgreSQL", "Stripe"],
-      links: { repo: "https://github.com/fabrizio-ricardini", demo: "https://github.com/fabrizio-ricardini" },
+        "Marketplace de oficios creado en Fundacion Pescar para conectar personas que ofrecen y buscan servicios. Trabaje como PM/Dev, coordinando el roadmap del equipo y desarrollando partes clave del frontend con HTML, CSS, JavaScript, Sass y Bootstrap. Se entrego un MVP funcional y publicado, enfocado en resolver una necesidad real de oferta y demanda local.",
+      stack: ["HTML", "CSS", "JavaScript", "Sass", "Bootstrap"],
+      links: {
+        repo: "https://github.com/k1000oEnz/ChanGo--Main/tree/main",
+        demo: "https://changomain.netlify.app/",
+      },
     },
     {
-      id: "proj-2",
-      title: "AI Chatbot",
-      terminal_desc: "-rwxr-xr-x  8.2K  Feb 03  bot.py",
+      id: "proj-talleres-abiertos",
+      title: "Talleres Abiertos",
+      terminal_desc: "drwxr-xr-x  14K  2024  evento-central-park/",
       modern_desc:
-        "An intelligent chatbot powered by OpenAI API with context retention, multi-turn conversations, and embeddings-based knowledge retrieval.",
-      stack: ["Python", "OpenAI", "FastAPI", "Redis"],
-      links: { repo: "https://github.com/fabrizio-ricardini", demo: "https://github.com/fabrizio-ricardini" },
+        "Sitio web para difundir el evento Talleres Abiertos del Complejo Empresarial Central Park, con foco en comunicar agenda, talleres y convocatoria de artistas. Participe como PM/Dev, organizando entregas y desarrollando modulos de interfaz en HTML, CSS y JavaScript. El resultado fue una landing publicada, clara y orientada a facilitar la participacion.",
+      stack: ["HTML", "CSS", "JavaScript"],
+      links: {
+        repo: "https://github.com/Fabrizio-Ricardini/ProyectoTalleresAbiertos",
+        demo: "https://talleresabiertos.netlify.app/",
+      },
     },
     {
-      id: "proj-3",
-      title: "Dev Portfolio",
-      terminal_desc: "drwxr-xr-x  4.1K  Feb 12  src/",
+      id: "proj-portfolio-dual-ui",
+      title: "Portfolio Dual UI",
+      terminal_desc: "drwxr-xr-x  22K  2026  portfolio-terminal-gui/",
       modern_desc:
-        "A dual-mode portfolio website featuring a terminal interface and a modern UI with seamless animated transitions between modes.",
-      stack: ["Next.js", "Tailwind CSS", "Framer Motion"],
-      links: { repo: "https://github.com/fabrizio-ricardini", demo: "https://github.com/fabrizio-ricardini" },
-    },
-    {
-      id: "proj-4",
-      title: "Task CLI",
-      terminal_desc: "-rwxr-xr-x  3.5K  Dec 28  taskr",
-      modern_desc:
-        "A blazing-fast CLI task manager written in Rust. Supports projects, tags, priorities, and syncs with GitHub Issues via the API.",
-      stack: ["Rust", "Clap", "SQLite", "GitHub API"],
-      links: { repo: "https://github.com/fabrizio-ricardini", demo: "https://github.com/fabrizio-ricardini" },
+        "Aplicacion en Next.js/TypeScript con arquitectura de datos centralizada y renderizado dual (Terminal + Modern UI) sobre una misma fuente de contenido. Implementa manejo de estado compartido, transiciones con Framer Motion y criterios de accesibilidad para interaccion por teclado. Resultado: deploy productivo en Vercel y base extensible para iteraciones de producto.",
+      stack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      links: {
+        repo: "https://github.com/Fabrizio-Ricardini/portfolio",
+        demo: "https://portfolio-fabrizio.vercel.app/",
+      },
     },
   ] as Project[],
   fileSystem: [
@@ -176,10 +176,9 @@ export const portfolioData = {
       name: "projects",
       type: "folder",
       children: [
-        { name: "ecommerce", type: "file", id: "proj-1" },
-        { name: "chatbot", type: "file", id: "proj-2" },
-        { name: "portfolio", type: "file", id: "proj-3" },
-        { name: "taskr", type: "file", id: "proj-4" },
+        { name: "chango", type: "file", id: "proj-fundacion-pescar" },
+        { name: "talleres-abiertos", type: "file", id: "proj-talleres-abiertos" },
+        { name: "portfolio-dual-ui", type: "file", id: "proj-portfolio-dual-ui" },
       ],
     },
     { name: "README.md", type: "file", content: "readme" },
