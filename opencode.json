@@ -1,0 +1,16 @@
+{
+  "instructions": [
+    "docs/standards/_index.md",
+    "docs/standards/00-core-quality.md",
+    "docs/standards/20-testing-strategy.md",
+    "docs/standards/40-repo-structure-ownership.md",
+    "docs/standards/10-architecture-frontend-layered.md",
+    "docs/standards/30-error-handling-logging.md",
+    "docs/standards/05-decision-making-rubric.md",
+    "docs/standards/90-change-management.md",
+    "docs/decisions/_index.md",
+    "docs/decisions/0001-architecture.md",
+    "docs/decisions/0002-testing-quality-gates.md",
+    "docs/decisions/0003-repo-structure-ownership.md"
+  ]
+}
