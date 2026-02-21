@@ -260,9 +260,12 @@ body {
     scroll-behavior: auto !important;
   }
 
-  .terminal-scanlines,
-  .crt-glow {
+  .terminal-scanlines {
     display: none !important;
+  }
+
+  .crt-glow {
+    box-shadow: none !important;
   }
 
   .animate-crt-off,
