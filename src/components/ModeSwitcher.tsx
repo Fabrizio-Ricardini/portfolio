@@ -9,11 +9,7 @@ import TerminalModeView from "./terminal/TerminalModeView";
 import { CRT_ANIMATION_DURATION_MS, CRT_TURN_ON_DURATION_MS } from "@/lib/constants";
 
 const ModernModeView = dynamic(() => import("./modern/ModernModeView"), {
-  loading: () => (
-    <div className="w-full min-h-screen min-h-dvh grid place-items-center bg-modern-bg text-modern-muted text-sm">
-      Loading modern mode...
-    </div>
-  ),
+  loading: () => <div className="w-full h-full" aria-hidden="true" />,
 });
 
 type TransitionPhase = "idle" | "crt-off" | "crt-on";
