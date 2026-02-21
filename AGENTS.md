@@ -56,10 +56,10 @@ Active ADRs:
 - **Lint:** npm run lint
 - **Tests:** not-configured (no unit/integration gate enforced yet)
 - **Build:** npm run build
-- **E2E (if applicable):** not-configured as mandatory gate (Playwright tooling is present)
+- **E2E (if applicable):** npm run test:e2e:smoke (non-blocking CI job, not mandatory gate)
 
 > If commands are unknown, use `not-configured` and record the decision in ADR 0002.
-> Current posture: `@playwright/test` and `playwright.config.ts` are installed for incremental adoption, but CI gating is still lint + build.
+> Current posture: lint + build are mandatory gates; smoke E2E runs in CI as non-blocking while stability hardening continues.
 
 ## 8) Git Protocol & Commits
 - Conventional Commits: `<type>(<scope>): <description>`

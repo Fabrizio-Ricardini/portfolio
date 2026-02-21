@@ -1,5 +1,5 @@
 # ADR 0003 - Repo Structure & Ownership
-**Status:** proposed
+**Status:** accepted
 
 ## Context
 - Monorepo? no

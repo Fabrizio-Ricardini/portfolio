@@ -31,7 +31,7 @@
 
 ## Gaps de governance detectados
 
-1. Mensajes parcialmente ambiguos entre `AGENTS.MD`, `README.md` y `docs/decisions/0002-testing-quality-gates.md`.
+1. Mensajes parcialmente ambiguos entre `AGENTS.md`, `README.md` y `docs/decisions/0002-testing-quality-gates.md`.
 2. ADR 0002 no explicita suficientemente la diferencia entre tooling presente y gate obligatorio.
 3. `check-bootstrap-consistency.py` falla en comparacion de standards cuando el header publicado usa bloque HTML.
 
@@ -40,7 +40,7 @@
 ### Task 1: Alinear AGENTS con estado real de testing
 
 **Files:**
-- Modify: `AGENTS.MD`
+- Modify: `AGENTS.md`
 
 **Steps:**
 1. Mantener matriz de verificacion con `lint/build` activos.
@@ -96,7 +96,7 @@ Expected:
 ## Salida esperada
 
 - Governance testing policy consistente entre:
-  - `AGENTS.MD`
+  - `AGENTS.md`
   - `docs/decisions/0002-testing-quality-gates.md`
   - `README.md`
 - Plan de auditoria guardado en:

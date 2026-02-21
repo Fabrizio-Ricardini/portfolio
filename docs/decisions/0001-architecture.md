@@ -1,5 +1,5 @@
 # ADR 0001 - Architecture
-**Status:** proposed
+**Status:** accepted
 
 ## Context
 - Project type: frontend

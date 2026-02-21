@@ -78,8 +78,8 @@
   - MCP policy is explicit.
   - Skills policy is intentionally minimal.
 - Key drift:
-  - Repository tracks `AGENTS.MD`, while many governance docs/scripts reference `AGENTS.md`.
-  - This casing mismatch can break deterministic checks and cross-platform workflows.
+  - Repository should use canonical `AGENTS.md` naming and keep docs/scripts aligned.
+  - Casing mismatch can break deterministic checks and cross-platform workflows.
 
 ### Standards and ADR Alignment
 
@@ -125,7 +125,7 @@
 1. Fix governance consistency checker to parse current standards header format.
    - Target: `.opencode/scripts/check-bootstrap-consistency.py`
 2. Normalize AGENTS canonical filename and references.
-   - Targets: `AGENTS.MD` (rename target), docs/scripts referencing `AGENTS.md`.
+   - Targets: `AGENTS.md`, docs/scripts referencing AGENTS contract path.
 3. Reconcile ADR lifecycle state with actual governance usage.
    - Targets:
      - `docs/decisions/0001-architecture.md`
@@ -177,7 +177,7 @@
 
 Files to update in this phase:
 
-- `AGENTS.MD` (canonicalization step)
+- `AGENTS.md` (canonicalization step)
 - `docs/plans/bootstrap-manifest.yml`
 - `.opencode/scripts/check-bootstrap-consistency.py`
 - Any docs/scripts that reference the non-canonical AGENTS path
