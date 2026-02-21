@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 export type ActiveView =
   | { type: "home" }
@@ -19,32 +26,35 @@ const ActiveFileContext = createContext<ActiveFileContextType | undefined>(
   undefined
 );
 
-export const ActiveFileProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [activeView, setActiveView] = useState<ActiveView>({ type: "home" });
+export const ActiveFileProvider = ({ children }: { children: ReactNode }) => {
+  const [activeView, setActiveViewState] = useState<ActiveView>({ type: "home" });
 
-  const breadcrumb = (() => {
+  const setActiveView = useCallback((view: ActiveView) => {
+    setActiveViewState(view);
+  }, []);
+
+  const breadcrumb = useMemo(() => {
     switch (activeView.type) {
       case "home":
         return "~";
       case "folder":
-        return `~/${activeView.path}`;
       case "file":
+      case "executable":
         return `~/${activeView.path}`;
       case "project":
         return `~/projects/${activeView.path}`;
-      case "executable":
-        return `~/${activeView.path}`;
       default:
         return "~";
     }
-  })();
+  }, [activeView]);
+
+  const contextValue = useMemo(
+    () => ({ activeView, setActiveView, breadcrumb }),
+    [activeView, breadcrumb, setActiveView]
+  );
 
   return (
-    <ActiveFileContext.Provider value={{ activeView, setActiveView, breadcrumb }}>
-      {children}
-    </ActiveFileContext.Provider>
+    <ActiveFileContext.Provider value={contextValue}>{children}</ActiveFileContext.Provider>
   );
 };
 
