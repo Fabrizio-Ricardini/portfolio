@@ -3,21 +3,11 @@
 import { ReactNode, useState } from "react";
 import { Menu, X } from "lucide-react";
 import AuroraBackground from "@/components/effects/AuroraBackground";
+import { NAVIGATION_SECTIONS, scrollToSection } from "@/lib/navigation";
 
-const navLinks = [
-  { label: "Proyectos", href: "#projects" },
-  { label: "Sobre mí", href: "#about" },
-  { label: "Experiencia", href: "#experience" },
-  { label: "Habilidades", href: "#skills" },
-  { label: "Contacto", href: "#contact" },
-];
-
-function scrollToSection(href: string) {
-  const el = document.querySelector(href);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}
+const navLinks = NAVIGATION_SECTIONS.filter((section) => section.showInNavbar).map(
+  (section) => ({ label: section.navLabel, href: section.href })
+);
 
 export default function ModernLayout({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);

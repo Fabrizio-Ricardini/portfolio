@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { portfolioData } from "@/lib/data";
 import { supportsWebGL } from "@/lib/webgl";
@@ -68,9 +68,13 @@ function ColorPalette() {
   );
 }
 
+function UptimeLine() {
+  const uptime = useUptime();
+  return <SpecLine label="Uptime" value={uptime} />;
+}
+
 // ── Main Neofetch Component ────────────────────────────────────────
 export default function Neofetch() {
-  const uptime = useUptime();
   const { personal, projects, fileSystem } = portfolioData;
   const [show3DEffect, setShow3DEffect] = useState(false);
 
@@ -117,7 +121,6 @@ export default function Neofetch() {
   const specs = [
     { label: "OS", value: "Next.js 16 x86_64" },
     { label: "Host", value: `${personal.name} — ${personal.role}` },
-    { label: "Uptime", value: uptime },
     { label: "Packages", value: `${fileCount} files, ${projects.length} projects` },
     { label: "Resolution", value: "responsive x adaptive" },
     { label: "Theme", value: "Cyberpunk Violet [dark]" },
@@ -157,8 +160,11 @@ export default function Neofetch() {
         </p>
         <hr className="border-terminal-border my-1 w-48" aria-hidden="true" />
         <ul className="space-y-0.5">
-          {specs.map(({ label, value }) => (
-            <SpecLine key={label} label={label} value={value} />
+          {specs.map(({ label, value }, index) => (
+            <Fragment key={label}>
+              <SpecLine label={label} value={value} />
+              {index === 1 ? <UptimeLine /> : null}
+            </Fragment>
           ))}
           <ColorPalette />
         </ul>

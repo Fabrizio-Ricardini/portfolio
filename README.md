@@ -69,17 +69,26 @@ npm run start   # servir build
 
 ## Calidad y verificacion
 - Lint y build deben pasar antes de merge/push.
+- Unit/integration tests aun no estan configurados como gate obligatorio.
+- E2E aun no es gate obligatorio; la adopcion es incremental con smoke suite.
 - CI en `.github/workflows/ci.yml` ejecuta:
   - `npm ci`
   - `npm run lint`
   - `npm run build`
+  - `npm run test:e2e:smoke` (job no bloqueante)
 
 ## Playwright (reglas del proyecto)
-Configuracion orientada a ejecucion liviana:
+Tooling presente para adopcion incremental, con configuracion orientada a ejecucion liviana:
 - `headless: true`
 - `screenshot: 'off'`
 - `video: 'off'`
 - `trace: 'off'`
+
+Estado actual: hay smoke suite (`e2e/smoke/*`) y corre en CI como no bloqueante.
+
+Comandos utiles:
+- `npm run test:e2e`
+- `npm run test:e2e:smoke`
 
 Ver `playwright.config.ts`.
 

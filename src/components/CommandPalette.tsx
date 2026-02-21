@@ -2,18 +2,23 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { 
-  Search, 
-  Terminal, 
-  Home, 
-  Code2, 
-  User, 
-  Mail, 
+import {
+  Search,
+  Terminal,
+  Home,
+  Code2,
+  User,
+  Mail,
   FileText,
-  Monitor
+  Monitor,
 } from "lucide-react";
 import { useViewMode } from "@/context/ViewModeContext";
 import { useActiveFile } from "@/context/ActiveFileContext";
+import {
+  NAVIGATION_SECTIONS,
+  type NavigationIcon,
+  scrollToSection,
+} from "@/lib/navigation";
 
 type Command = {
   id: string;
@@ -21,6 +26,17 @@ type Command = {
   icon: React.ComponentType<{ className?: string }>;
   action: () => void;
   group: string;
+};
+
+const navigationIconMap: Record<
+  NavigationIcon,
+  React.ComponentType<{ className?: string }>
+> = {
+  home: Home,
+  code2: Code2,
+  user: User,
+  fileText: FileText,
+  mail: Mail,
 };
 
 export default function CommandPalette() {
@@ -31,6 +47,20 @@ export default function CommandPalette() {
 
   const { mode, setMode } = useViewMode();
   const { setActiveView } = useActiveFile();
+
+  const navigationCommands: Command[] = NAVIGATION_SECTIONS.map((section) => ({
+    id: `nav-${section.id}`,
+    label: section.commandLabel,
+    icon: navigationIconMap[section.icon],
+    group: "Navigation",
+    action: () => {
+      if (mode === "terminal") {
+        setActiveView(section.terminalTarget);
+      } else {
+        scrollToSection(section.href);
+      }
+    },
+  }));
 
   // Define commands
   const commands: Command[] = [
@@ -48,67 +78,8 @@ export default function CommandPalette() {
       group: "Mode",
       action: () => setMode("gui"),
     },
-    {
-      id: "nav-home",
-      label: "Go to Home",
-      icon: Home,
-      group: "Navigation",
-      action: () => {
-        if (mode === "terminal") setActiveView({ type: "home" });
-        else document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" });
-      },
-    },
-    {
-      id: "nav-projects",
-      label: "View Projects",
-      icon: Code2,
-      group: "Navigation",
-      action: () => {
-        if (mode === "terminal") setActiveView({ type: "folder", path: "projects" });
-        else document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-      },
-    },
-    {
-      id: "nav-about",
-      label: "About Me",
-      icon: User,
-      group: "Navigation",
-      action: () => {
-        if (mode === "terminal") setActiveView({ type: "file", path: "about.md", contentKey: "about" });
-        else document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-      },
-    },
-    {
-      id: "nav-experience",
-      label: "Experience",
-      icon: FileText,
-      group: "Navigation",
-      action: () => {
-        if (mode === "terminal") setActiveView({ type: "file", path: "experience.md", contentKey: "experience" });
-        else document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
-      },
-    },
-    {
-      id: "nav-skills",
-      label: "Skills",
-      icon: FileText,
-      group: "Navigation",
-      action: () => {
-        if (mode === "terminal") setActiveView({ type: "file", path: "skills.md", contentKey: "skills" });
-        else document.getElementById("skills")?.scrollIntoView({ behavior: "smooth" });
-      },
-    },
-    {
-      id: "nav-contact",
-      label: "Contact",
-      icon: Mail,
-      group: "Navigation",
-      action: () => {
-        if (mode === "terminal") setActiveView({ type: "executable", path: "contact.sh", contentKey: "contact" });
-        else document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-      },
-    },
-    ];
+    ...navigationCommands,
+  ];
 
   // Filter commands
   const filteredCommands = commands.filter((cmd) =>

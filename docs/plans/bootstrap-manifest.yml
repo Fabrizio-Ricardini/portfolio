@@ -1,0 +1,124 @@
+version: 1
+generated_on: 2026-02-20
+
+project_profile:
+  type: frontend
+  stack:
+    primary: "Next.js 16 + React 19 + TypeScript + Tailwind CSS v4"
+    notes: "App Router, dual UI terminal/gui, Framer Motion, data centralizada en src/lib/data.ts"
+  architecture:
+    primary: "Frontend-Layered"
+    rationale: "Respeta la estructura actual del repo y evita refactor arquitectural en la primera pasada de governance."
+  constraints:
+    priorities: ["maintainability", "speed", "testability", "performance"]
+    notes: "Adopcion incremental de governance sin romper la estructura vigente ni forzar migraciones de carpetas."
+  source_of_truth_path: "src/"
+
+apply_policy:
+  prune_mode: archive
+  unused_dir: ".opencode/_unused"
+  protect_core: true
+
+verification:
+  lint_cmd: "npm run lint"
+  test_cmd: "not-configured"
+  build_cmd: "npm run build"
+  e2e_cmd: "not-configured"
+
+mcp:
+  context7:
+    enabled: true
+    mode: auto
+    triggers:
+      - "framework_or_library_api_question"
+      - "version_upgrade_or_migration"
+      - "integration_error_with_external_dependency"
+      - "uncertain_stack_syntax_or_behavior"
+
+adr_inputs:
+  architecture:
+    adr_status: "proposed"
+    alternative_1_name: "Feature-Sliced"
+    alternative_1_why_not: "Implica reestructuracion inmediata de carpetas/imports y contradice el objetivo de no refactor en esta primera pasada."
+    alternative_2_name: "VIPER"
+    alternative_2_why_not: "Exceso de ceremonia para este frontend en Next.js y no corresponde a los presets oficiales MVP."
+    decision_pros: "Alinea governance con la estructura actual (app/components/context/lib) minimizando riesgo de adopcion."
+    decision_cons: "Las fronteras por capas requieren disciplina para evitar crecimiento desordenado."
+    impact_repo_structure: "Se conserva src/ como fuente; se formalizan boundaries entre app, components (terminal/modern/effects), context, lib y content."
+    impact_testing: "Se consolidan quality gates de lint/build ahora y se deja evolutivo test/e2e para ADRs posteriores."
+    plan_file: "2026-02-20-bootstrap-architecture.md"
+  testing:
+    adr_status: "proposed"
+    delivery_risk: "medium"
+    quality_needs: "Mantener estabilidad de entrega mientras se incorpora governance en forma incremental."
+    quality_constraints: "Hoy solo hay comandos explicitos de lint/build; test/e2e no estan configurados como gate."
+    testing_unit: "not-configured"
+    testing_integration: "not-configured"
+    testing_e2e: "not-configured"
+    alternative_more_e2e_why_not: "Agregar E2E intensivo sin base estable de escenarios aumenta costo y fragilidad temprana."
+    alternative_less_testing_why_not: "Reduciria demasiado la confianza para cambios de arquitectura/governance."
+    tradeoffs: "Adopcion rapida y segura ahora, con huecos de testing documentados y trazables para cierre incremental."
+  structure:
+    adr_status: "proposed"
+    is_monorepo: "no"
+    boundary_rules: "source_of_truth en src/; wiring en src/app; UI en src/components (terminal/modern/effects/errors); estado en src/context; utilidades y data compartida en src/lib; contenido en src/content."
+    ownership_rules: "Ownership por capa/superficie funcional: app shell, terminal UI, modern UI, effects, estado y contratos de datos."
+    alternative_structure_why_not: "Migrar ahora a esquema totalmente por dominio introduce churn sin beneficio inmediato para el objetivo actual."
+    pros_cons: "Maxima compatibilidad con el estado actual y onboarding claro; requiere reforzar disciplina de imports con el tiempo."
+
+standards:
+  keep:
+    - ".opencode/templates/standards/_index.md"
+    - ".opencode/templates/standards/00-core-quality.md"
+    - ".opencode/templates/standards/05-decision-making-rubric.md"
+    - ".opencode/templates/standards/10-architecture-frontend-layered.md"
+    - ".opencode/templates/standards/20-testing-strategy.md"
+    - ".opencode/templates/standards/30-error-handling-logging.md"
+    - ".opencode/templates/standards/40-repo-structure-ownership.md"
+    - ".opencode/templates/standards/90-change-management.md"
+
+decisions:
+  create:
+    - "docs/decisions/0001-architecture.md"
+    - "docs/decisions/0002-testing-quality-gates.md"
+    - "docs/decisions/0003-repo-structure-ownership.md"
+  index: "docs/decisions/_index.md"
+  meta: "docs/decisions/_meta.md"
+
+docs_standards:
+  publish: true
+  dir: "docs/standards"
+  index: "docs/standards/_index.md"
+  meta: "docs/standards/_meta.md"
+  source_dir: ".opencode/templates/standards"
+
+opencode:
+  config_file: "opencode.json"
+  instructions:
+    - "docs/standards/_index.md"
+    - "docs/standards/00-core-quality.md"
+    - "docs/standards/20-testing-strategy.md"
+    - "docs/standards/40-repo-structure-ownership.md"
+    - "docs/standards/10-architecture-frontend-layered.md"
+    - "docs/standards/30-error-handling-logging.md"
+    - "docs/standards/05-decision-making-rubric.md"
+    - "docs/standards/90-change-management.md"
+    - "docs/decisions/_index.md"
+    - "docs/decisions/0001-architecture.md"
+    - "docs/decisions/0002-testing-quality-gates.md"
+    - "docs/decisions/0003-repo-structure-ownership.md"
+
+agents:
+  file: "AGENTS.md"
+  template: ".opencode/templates/agents/AGENTS.template.md"
+  include_skills:
+    mode: minimal
+    max: 7
+    must_include:
+      - "project-triage"
+      - "systematic-debugging"
+      - "verification-before-completion"
+      - "requesting-code-review"
+      - "git-commit"
+      - "writing-plans"
+      - "next-best-practices"
