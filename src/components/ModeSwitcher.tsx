@@ -2,13 +2,20 @@
 
 import { useViewMode } from "@/context/ViewModeContext";
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
-import TerminalLayout from "./terminal/TerminalLayout";
-import ModernLayout from "./modern/ModernLayout";
-import ModernContent from "./modern/ModernContent";
 import ToggleModeButton from "./ToggleModeButton";
 import { CRT_ANIMATION_DURATION_MS, CRT_TURN_ON_DURATION_MS } from "@/lib/constants";
-import TerminalRenderBoundary from "./errors/TerminalRenderBoundary";
+
+const TerminalModeView = dynamic(() => import("./terminal/TerminalModeView"), {
+  ssr: false,
+  loading: () => <div className="w-full h-full" />,
+});
+
+const ModernModeView = dynamic(() => import("./modern/ModernModeView"), {
+  ssr: false,
+  loading: () => <div className="w-full h-full" />,
+});
 
 type TransitionPhase = "idle" | "crt-off" | "crt-on";
 
@@ -137,15 +144,11 @@ export default function ModeSwitcher() {
       >
         {mode === "terminal" ? (
           <div className="w-full h-full">
-            <TerminalRenderBoundary>
-              <TerminalLayout />
-            </TerminalRenderBoundary>
+            <TerminalModeView />
           </div>
         ) : (
           <div className="w-full h-full">
-            <ModernLayout>
-              <ModernContent />
-            </ModernLayout>
+            <ModernModeView />
           </div>
         )}
         <ToggleModeButton disabled={false} />
@@ -168,9 +171,7 @@ export default function ModeSwitcher() {
             exit={{ opacity: 1 }}
             className={`w-full h-full ${crtClass}`}
           >
-            <TerminalRenderBoundary>
-              <TerminalLayout />
-            </TerminalRenderBoundary>
+            <TerminalModeView />
           </motion.div>
         ) : (
           <motion.div
@@ -181,9 +182,7 @@ export default function ModeSwitcher() {
             transition={{ duration: 0.3 }}
             className="w-full h-full"
           >
-            <ModernLayout>
-              <ModernContent />
-            </ModernLayout>
+            <ModernModeView />
           </motion.div>
         )}
       </AnimatePresence>
