@@ -5,16 +5,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
 import ToggleModeButton from "./ToggleModeButton";
+import TerminalModeView from "./terminal/TerminalModeView";
 import { CRT_ANIMATION_DURATION_MS, CRT_TURN_ON_DURATION_MS } from "@/lib/constants";
 
-const TerminalModeView = dynamic(() => import("./terminal/TerminalModeView"), {
-  ssr: false,
-  loading: () => <div className="w-full h-full" />,
-});
-
 const ModernModeView = dynamic(() => import("./modern/ModernModeView"), {
-  ssr: false,
-  loading: () => <div className="w-full h-full" />,
+  loading: () => (
+    <div className="w-full min-h-screen min-h-dvh grid place-items-center bg-modern-bg text-modern-muted text-sm">
+      Loading modern mode...
+    </div>
+  ),
 });
 
 type TransitionPhase = "idle" | "crt-off" | "crt-on";
